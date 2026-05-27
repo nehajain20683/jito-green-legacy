@@ -1,0 +1,33 @@
+export const runtime = 'nodejs';
+// src/app/api/receipts/[id]/pdf/route.ts
+import { NextResponse } from 'next/server';
+import prisma from '@/lib/prisma';
+import { generateReceiptPDF } from '@/lib/pdf';
+
+export async function GET(req: Request, { params }: { params: { id: string } }) {
+  const donation = await prisma.donation.findUnique({
+    where: { id: params.id },
+    include: { campaign: true },
+  });
+  if (!donation) return NextResponse.json({ error: 'Not found' }, { status: 404 });
+
+  const html = generateReceiptPDF({
+    receiptNumber: donation.receiptNumber!,
+    donorName: donation.donorName,
+    donorEmail: donation.donorEmail,
+    donorPan: donation.donorPan || undefined,
+    amount: donation.amount,
+    numberOfTrees: donation.numberOfTrees,
+    campaignName: donation.campaign.name,
+    paymentGatewayId: donation.paymentGatewayId || undefined,
+    date: donation.createdAt,
+  });
+
+  // Return HTML that auto-prints as PDF
+  return new NextResponse(html, {
+    headers: {
+      'Content-Type': 'text/html; charset=utf-8',
+      'Content-Disposition': `inline; filename="receipt-${donation.receiptNumber}.html"`,
+    },
+  });
+}

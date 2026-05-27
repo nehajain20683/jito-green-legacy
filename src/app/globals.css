@@ -1,0 +1,166 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+:root {
+  --font-display: 'Playfair Display';
+  --font-body: 'DM Sans';
+  --radius: 0.75rem;
+
+  /* Light natural palette */
+  --sage-50:  #f6f9f4;
+  --sage-100: #eaf2e6;
+  --sage-200: #d3e6cc;
+  --sage-300: #aecfa4;
+  --sage-400: #7db870;
+  --sage-500: #5a9e4e;
+  --sage-600: #448039;
+  --sage-700: #376631;
+  --sage-800: #2e5228;
+  --sage-900: #264422;
+
+  --cream-50:  #fefdf8;
+  --cream-100: #fdf8ee;
+  --cream-200: #f9edd4;
+  --cream-300: #f3ddb0;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  font-family: var(--font-body), sans-serif;
+  background: #fefdf8;
+  color: #2c3e2c;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4 { font-family: var(--font-display), serif; }
+
+/* Fade up animation */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.fade-up { animation: fadeUp 0.7s ease-out forwards; }
+.fade-up-d1 { animation: fadeUp 0.7s 0.1s ease-out both; }
+.fade-up-d2 { animation: fadeUp 0.7s 0.2s ease-out both; }
+.fade-up-d3 { animation: fadeUp 0.7s 0.3s ease-out both; }
+
+/* Soft card lift */
+.card-lift {
+  transition: transform 0.28s ease, box-shadow 0.28s ease;
+}
+.card-lift:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 16px 40px rgba(68,128,57,0.12);
+}
+
+/* Gradient text */
+.gradient-text {
+  background: linear-gradient(135deg, #376631 0%, #5a9e4e 50%, #7db870 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: #f6f9f4; }
+::-webkit-scrollbar-thumb { background: #aecfa4; border-radius: 3px; }
+
+/* Image overlay utility */
+.img-overlay {
+  position: relative;
+  overflow: hidden;
+}
+.img-overlay::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, transparent 40%, rgba(38,68,34,0.55) 100%);
+}
+
+/* ════════════════════════════════════════════
+   MOBILE RESPONSIVENESS — global utilities
+   ════════════════════════════════════════════ */
+
+/* Prevent horizontal overflow everywhere */
+html, body { overflow-x: hidden; }
+img, video, svg { max-width: 100%; }
+
+/* Touch-friendly tap targets */
+button, a { min-height: 44px; }
+
+/* ── Certificate mobile preview ── */
+.cert-preview-container {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.cert-preview-container iframe,
+.cert-preview-container .cert-frame {
+  min-width: 320px;
+  width: 100%;
+  transform-origin: top left;
+}
+
+/* ── Responsive tables → cards on mobile ── */
+@media (max-width: 640px) {
+  .table-responsive thead { display: none; }
+  .table-responsive tr {
+    display: block;
+    border: 1px solid #eaf2e6;
+    border-radius: 12px;
+    margin-bottom: 12px;
+    padding: 12px;
+    background: white;
+  }
+  .table-responsive td {
+    display: flex;
+    justify-content: space-between;
+    padding: 4px 0;
+    font-size: 13px;
+    border: none;
+  }
+  .table-responsive td::before {
+    content: attr(data-label);
+    color: #448039;
+    font-weight: 500;
+    flex-shrink: 0;
+    margin-right: 8px;
+  }
+}
+
+/* ── Form inputs mobile ── */
+@media (max-width: 640px) {
+  input, select, textarea {
+    font-size: 16px !important; /* prevent iOS zoom */
+  }
+}
+
+/* ── Hero section responsive ── */
+@media (max-width: 1024px) {
+  .hero-grid { grid-template-columns: 1fr !important; }
+  .hero-stats { display: none !important; }
+}
+
+/* ── Card grid responsive ── */
+@media (max-width: 640px) {
+  .campaign-grid { grid-template-columns: 1fr !important; }
+  .package-grid  { grid-template-columns: 1fr 1fr !important; }
+  .stats-grid    { grid-template-columns: 1fr 1fr !important; }
+}
+
+/* ── Sticky sidebar → normal on mobile ── */
+@media (max-width: 1024px) {
+  .checkout-sidebar .sticky { position: static !important; }
+}
+
+/* ── Certificate print media ── */
+@media print {
+  .no-print { display: none !important; }
+  body { margin: 0; }
+  .cert-page { width: 100vw; height: 100vh; }
+}
