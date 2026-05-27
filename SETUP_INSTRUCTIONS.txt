@@ -1,0 +1,72 @@
+=====================================================
+  TREE PLANTATION PLATFORM — SETUP INSTRUCTIONS
+=====================================================
+
+QUICK START (2 options):
+--------------------------
+
+OPTION A — Double-click setup (easiest):
+  → Double-click "setup.bat" in this folder
+  → Choose your database option (1, 2, or 3)
+  → Follow the prompts
+  → Done!
+
+OPTION B — PowerShell (recommended):
+  → Right-click on "setup.ps1"
+  → Click "Run with PowerShell"
+  OR open PowerShell in this folder and run:
+  → powershell -ExecutionPolicy Bypass -File setup.ps1
+
+
+DATABASE OPTIONS EXPLAINED:
+-----------------------------
+
+[Option 1] Local PostgreSQL
+  - You must have PostgreSQL installed
+  - Download from: https://www.postgresql.org/download/windows/
+  - You'll need the postgres user password you set during install
+
+[Option 2] Neon.tech FREE Cloud (RECOMMENDED for beginners)
+  - No installation needed
+  - Go to https://neon.tech → Sign up free
+  - Create Project → Copy connection string
+  - Paste it when the script asks
+
+[Option 3] Manual URL
+  - Use if you have Supabase, Railway, or any other PostgreSQL
+
+
+MANUAL SETUP (if scripts don't work):
+---------------------------------------
+
+1. Create a file called ".env" in this folder with:
+
+   DATABASE_URL="postgresql://postgres:YOUR_PASSWORD@localhost:5432/tree_platform"
+   NEXTAUTH_SECRET="treeplantationdriveplatformsecretkey2024xyz"
+   NEXTAUTH_URL="http://localhost:3000"
+   NEXT_PUBLIC_APP_URL="http://localhost:3000"
+   RAZORPAY_KEY_ID="rzp_test_placeholder"
+   RAZORPAY_KEY_SECRET="placeholder_secret"
+   NEXT_PUBLIC_RAZORPAY_KEY_ID="rzp_test_placeholder"
+
+2. Run these commands one by one:
+   npx prisma generate
+   npx prisma migrate dev --name init
+   npx ts-node --project tsconfig.json prisma/seed.ts
+   npm run dev
+
+3. Open http://localhost:3000
+
+
+ADMIN LOGIN:
+  Email:    admin@treeplantation.org
+  Password: admin@123
+
+RAZORPAY PAYMENTS:
+  Get free test keys at: https://dashboard.razorpay.com
+  Update RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET in .env
+
+
+NEED HELP?
+  Common issues and fixes are in README.md
+=====================================================
