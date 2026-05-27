@@ -157,12 +157,12 @@ export async function sendDonationConfirmationEmail(data: DonationEmailData): Pr
         {
           filename:    `receipt-${data.receiptNumber}.html`,
           content:     htmlToBase64(receiptHtml),
-          content_type: 'text/html',
+          mimeType: 'text/html',
         },
         {
           filename:    `certificate-${data.receiptNumber}.html`,
           content:     htmlToBase64(certificateHtml),
-          content_type: 'text/html',
+          mimeType: 'text/html',
         },
       ],
     });
