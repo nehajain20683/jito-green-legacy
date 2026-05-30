@@ -199,7 +199,7 @@ function DashboardContent() {
                   </div>
                   <div className="text-right">
                     <div className="font-bold text-sage-900">₹{p.amount.toLocaleString('en-IN')}</div>
-                    <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${p.status === 'PAID' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'}`}>
+                    <span className={`text-xs font-semibold px-2 py-0.5 rounded-full ${p.status === 'COMPLETED' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'}`}>
                       {p.status}
                     </span>
                   </div>
