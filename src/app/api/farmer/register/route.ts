@@ -11,7 +11,7 @@ const schema = z.object({
   gender:         z.enum(['MALE','FEMALE','OTHER']).optional(),
   aadhaarNumber:  z.string().optional(),
   panNumber:      z.string().optional(),
-  email:          z.string().email().optional().or(z.literal('')),
+  email:          z.string().optional().transform(v => v === '' ? undefined : v),
   alternateMobile:z.string().optional(),
   village:        z.string().optional(),
   taluka:         z.string().optional(),
