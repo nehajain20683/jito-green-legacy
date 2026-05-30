@@ -3,14 +3,14 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { CheckCircle, ChevronRight, ChevronLeft, Leaf, MapPin, User, Building2, Trees, FileText, Shield } from 'lucide-react';
+import { CheckCircle, ChevronRight, ChevronLeft, Leaf, MapPin, User, Building2, TreePine, FileText, Shield } from 'lucide-react';
 
 const STEPS = [
   { id: 1, title: 'Verify Mobile',     icon: Shield },
   { id: 2, title: 'Personal Details',  icon: User },
   { id: 3, title: 'Bank Details',      icon: Building2 },
   { id: 4, title: 'Land Details',      icon: MapPin },
-  { id: 5, title: 'Plantation Preference', icon: Trees },
+  { id: 5, title: 'Plantation Preference', icon: TreePine },
   { id: 6, title: 'Carbon Consent',    icon: Leaf },
 ];
 

@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { TreePine, MapPin, IndianRupee, Leaf, FileText, CheckCircle, Clock, AlertCircle, Plus, LogOut } from 'lucide-react';
+import { TreePine, MapPin, DollarSign, Leaf, FileText, CheckCircle, Clock, AlertCircle, Plus, LogOut } from 'lucide-react';
 import { Suspense } from 'react';
 
 const STATUS_CONFIG: Record<string, { label: string; color: string; icon: any }> = {
@@ -121,7 +121,7 @@ function DashboardContent() {
             { icon: MapPin,       label: 'Land Registered', value: `${(stats?.totalLandAcres || 0).toFixed(1)} ac`, color: 'bg-blue-50 text-blue-700' },
             { icon: TreePine,     label: 'Trees Planted',   value: stats?.totalTreesPlanted || 0,                  color: 'bg-green-50 text-green-700' },
             { icon: Leaf,         label: 'CO₂ Credits',     value: `${(stats?.totalCO2 || 0).toFixed(1)} tCO₂`,   color: 'bg-emerald-50 text-emerald-700' },
-            { icon: IndianRupee,  label: 'Revenue Earned',  value: `₹${(stats?.totalRevenue || 0).toLocaleString('en-IN')}`, color: 'bg-amber-50 text-amber-700' },
+            { icon: DollarSign,  label: 'Revenue Earned',  value: `₹${(stats?.totalRevenue || 0).toLocaleString('en-IN')}`, color: 'bg-amber-50 text-amber-700' },
           ].map(({ icon: Icon, label, value, color }) => (
             <div key={label} className={`${color} rounded-2xl p-4 border border-current/10`}>
               <Icon className="w-5 h-5 mb-2 opacity-70"/>
