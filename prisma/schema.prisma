@@ -206,3 +206,317 @@ enum TreeStatus {
   GROWING
   MATURE
 }
+
+// ══════════════════════════════════════════════════════════
+// FARMER ONBOARDING & MANAGEMENT MODULE
+// ══════════════════════════════════════════════════════════
+
+model Farmer {
+  id               String         @id @default(cuid())
+  // Auth
+  mobile           String         @unique
+  alternateMobile  String?
+  email            String?
+  otpHash          String?
+  otpExpiry        DateTime?
+  // Personal
+  fullName         String
+  fatherName       String?
+  dateOfBirth      DateTime?
+  gender           Gender?
+  aadhaarNumber    String?        @unique
+  panNumber        String?
+  photoUrl         String?
+  // Address
+  village          String?
+  taluka           String?
+  district         String?
+  state            String?
+  pincode          String?
+  // Bank
+  bankAccountName  String?
+  bankName         String?
+  accountNumber    String?
+  ifscCode         String?
+  cancelledChequeUrl String?
+  // Status
+  status           FarmerStatus   @default(REGISTERED)
+  carbonConsent    Boolean        @default(false)
+  // Relations
+  assignedOfficerId String?
+  assignedOfficer  FieldOfficer?  @relation(fields: [assignedOfficerId], references: [id])
+  lands            Land[]
+  documents        FarmerDocument[]
+  plantations      Plantation[]
+  payments         FarmerPayment[]
+  inspections      SiteInspection[]
+  auditLogs        AuditLog[]
+  carbonCredits    CarbonCredit[]
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
+
+  @@map("farmers")
+}
+
+model FieldOfficer {
+  id           String       @id @default(cuid())
+  name         String
+  email        String       @unique
+  mobile       String       @unique
+  password     String
+  employeeId   String?      @unique
+  designation  String?
+  district     String?
+  state        String?
+  active       Boolean      @default(true)
+  farmers      Farmer[]
+  inspections  SiteInspection[]
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  @@map("field_officers")
+}
+
+model Land {
+  id               String        @id @default(cuid())
+  farmerId         String
+  farmer           Farmer        @relation(fields: [farmerId], references: [id])
+  // Survey details
+  surveyNumber     String?
+  gutNumber        String?
+  khataNumber      String?
+  areaAcres        Float?
+  areaHectares     Float?
+  landType         LandType?
+  // Location
+  gpsLatitude      Float?
+  gpsLongitude     Float?
+  polygonGeoJson   Json?         // GeoJSON polygon boundary
+  village          String?
+  taluka           String?
+  district         String?
+  state            String?
+  // Status
+  verified         Boolean       @default(false)
+  verifiedAt       DateTime?
+  verifiedById     String?
+  // Plantation
+  plantationPreference  PlantationType?
+  speciesPreference     String[]
+  targetTreeCount  Int?
+  plantationStartDate DateTime?
+  // Relations
+  documents        FarmerDocument[]
+  plantations      Plantation[]
+  inspections      SiteInspection[]
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+
+  @@map("lands")
+}
+
+model FarmerDocument {
+  id           String       @id @default(cuid())
+  farmerId     String
+  farmer       Farmer       @relation(fields: [farmerId], references: [id])
+  landId       String?
+  land         Land?        @relation(fields: [landId], references: [id])
+  docType      DocumentType
+  fileUrl      String
+  fileName     String?
+  fileSize     Int?
+  mimeType     String?
+  status       DocStatus    @default(PENDING)
+  rejectionReason String?
+  verifiedById String?
+  verifiedAt   DateTime?
+  createdAt    DateTime     @default(now())
+
+  @@map("farmer_documents")
+}
+
+model SiteInspection {
+  id              String           @id @default(cuid())
+  farmerId        String
+  farmer          Farmer           @relation(fields: [farmerId], references: [id])
+  landId          String?
+  land            Land?            @relation(fields: [landId], references: [id])
+  officerId       String
+  officer         FieldOfficer     @relation(fields: [officerId], references: [id])
+  scheduledDate   DateTime?
+  inspectedAt     DateTime?
+  gpsLatitude     Float?
+  gpsLongitude    Float?
+  // Checklist
+  ownershipVerified  Boolean       @default(false)
+  boundaryVerified   Boolean       @default(false)
+  farmerMetPersonally Boolean      @default(false)
+  plantationFeasible Boolean       @default(false)
+  waterSourceAvailable Boolean     @default(false)
+  // Report
+  notes           String?
+  reportPdfUrl    String?
+  photos          String[]
+  status          InspectionStatus @default(SCHEDULED)
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  @@map("site_inspections")
+}
+
+model Plantation {
+  id              String          @id @default(cuid())
+  farmerId        String
+  farmer          Farmer          @relation(fields: [farmerId], references: [id])
+  landId          String?
+  land            Land?           @relation(fields: [landId], references: [id])
+  projectName     String?
+  plantationType  PlantationType?
+  species         String[]
+  treesPlanted    Int             @default(0)
+  treesSurviving  Int             @default(0)
+  plantedDate     DateTime?
+  lastMonitored   DateTime?
+  survivalRate    Float?
+  gpsCoordinates  Json?
+  photos          String[]
+  notes           String?
+  status          PlantationStatus @default(PLANNED)
+  // Carbon
+  co2Estimated    Float?          // tonnes
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  @@map("plantations")
+}
+
+model FarmerPayment {
+  id            String        @id @default(cuid())
+  farmerId      String
+  farmer        Farmer        @relation(fields: [farmerId], references: [id])
+  paymentType   PaymentType
+  amount        Float
+  description   String?
+  status        PaymentStatus @default(PENDING)
+  utrNumber     String?
+  paidAt        DateTime?
+  createdAt     DateTime      @default(now())
+
+  @@map("farmer_payments")
+}
+
+model CarbonCredit {
+  id              String       @id @default(cuid())
+  farmerId        String
+  farmer          Farmer       @relation(fields: [farmerId], references: [id])
+  vintageYear     Int?
+  creditsIssued   Float?       // tCO2e
+  creditsSold     Float?
+  revenueShared   Float?
+  registry        String?      // Verra, Gold Standard etc
+  serialNumber    String?
+  status          CreditStatus @default(PENDING)
+  issuedAt        DateTime?
+  createdAt       DateTime     @default(now())
+
+  @@map("carbon_credits")
+}
+
+model AuditLog {
+  id          String    @id @default(cuid())
+  farmerId    String?
+  farmer      Farmer?   @relation(fields: [farmerId], references: [id])
+  actorId     String?
+  actorRole   String?
+  action      String
+  details     Json?
+  ipAddress   String?
+  createdAt   DateTime  @default(now())
+
+  @@map("audit_logs")
+}
+
+// ── Enums ─────────────────────────────────────────────────
+
+enum Gender {
+  MALE
+  FEMALE
+  OTHER
+}
+
+enum FarmerStatus {
+  REGISTERED
+  DOCUMENTS_PENDING
+  DOCUMENTS_VERIFIED
+  INSPECTION_PENDING
+  INSPECTION_COMPLETED
+  APPROVED
+  ACTIVE
+  SUSPENDED
+}
+
+enum LandType {
+  AGRICULTURAL
+  PRIVATE
+  WASTELAND
+  AGROFORESTRY
+  ORCHARD
+  COMMUNITY
+}
+
+enum PlantationType {
+  AGROFORESTRY
+  MIYAWAKI
+  NATIVE_FOREST
+  FRUIT_TREES
+  BAMBOO
+  MIXED_SPECIES
+}
+
+enum DocumentType {
+  AADHAAR
+  PAN
+  LAND_7_12
+  LAND_RECORD
+  PROPERTY_TAX
+  OWNERSHIP_PROOF
+  CONSENT_LETTER
+  CANCELLED_CHEQUE
+  PLANTATION_PHOTO
+  OTHER
+}
+
+enum DocStatus {
+  PENDING
+  VERIFIED
+  REJECTED
+}
+
+enum InspectionStatus {
+  SCHEDULED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+enum PlantationStatus {
+  PLANNED
+  IN_PROGRESS
+  COMPLETED
+  MONITORING
+  COMPLETED_VERIFIED
+}
+
+enum PaymentType {
+  PLANTATION_INCENTIVE
+  MAINTENANCE_INCENTIVE
+  CARBON_REVENUE
+  CSR_PAYMENT
+}
+
+enum CreditStatus {
+  PENDING
+  ISSUED
+  SOLD
+  RETIRED
+}

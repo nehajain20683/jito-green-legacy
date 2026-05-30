@@ -68,3 +68,22 @@ async function main() {
 main()
   .catch(console.error)
   .finally(() => prisma.$disconnect());
+
+  // Seed a test field officer
+  const officerPass = await bcrypt.hash('officer@123', 12);
+  const existing = await prisma.fieldOfficer.findFirst({ where: { email: 'officer@jitomumbai.org' } }).catch(() => null);
+  if (!existing) {
+    await prisma.fieldOfficer.create({
+      data: {
+        name:        'Ramesh Patil',
+        email:       'officer@jitomumbai.org',
+        mobile:      '+919876543211',
+        password:    officerPass,
+        employeeId:  'JGL-FO-001',
+        designation: 'Field Officer',
+        district:    'Palghar',
+        state:       'Maharashtra',
+      },
+    });
+  }
+  console.log('✅ Field Officer seeded: officer@jitomumbai.org / officer@123');
