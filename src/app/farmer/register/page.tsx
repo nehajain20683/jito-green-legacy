@@ -70,8 +70,10 @@ export default function FarmerRegisterPage() {
     });
     const data = await res.json();
     setLoading(false);
-    if (data.success) { setOtpSent(true); if (data.devOtp) setDevOtp(data.devOtp); }
-    else setError(data.error || 'Failed to send OTP');
+    if (data.success) {
+      setOtpSent(true);
+      if (data.devOtp) setDevOtp(data.devOtp);
+    } else setError(data.error || 'Failed to send OTP');
   }
 
   async function verifyOTP() {
@@ -231,8 +233,10 @@ export default function FarmerRegisterPage() {
                   <p className="text-sage-700 font-medium">OTP sent to +91 {mobile}</p>
                   <p className="text-sage-500 text-xs mt-1">Valid for 10 minutes</p>
                   {devOtp && (
-                    <div className="mt-2 bg-amber-50 border border-amber-200 rounded-lg p-2 text-amber-700 text-xs font-mono">
-                      Dev OTP: {devOtp}
+                    <div className="mt-3 bg-amber-50 border-2 border-amber-300 rounded-xl p-3 text-center">
+                      <div className="text-amber-600 text-xs font-semibold uppercase tracking-wide mb-1">Your OTP (SMS not configured)</div>
+                      <div className="text-amber-800 text-3xl font-mono font-bold tracking-widest">{devOtp}</div>
+                      <div className="text-amber-500 text-xs mt-1">Enter this code below to continue</div>
                     </div>
                   )}
                 </div>
