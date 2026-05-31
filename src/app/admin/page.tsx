@@ -35,7 +35,7 @@ export default async function AdminDashboard() {
           <span className="font-display text-lg">Admin Panel</span>
         </div>
         <div className="flex items-center gap-6 text-sm text-forest-400">
-          <Link href="/admin/donations" className="hover:text-white">Donations</Link>
+          <Link href="/admin/people" className="hover:text-white">Donations</Link>
           <Link href="/" className="hover:text-white">← Site</Link>
           <button onClick={() => signOut({ callbackUrl: '/' })} className="hover:text-white flex items-center gap-1 text-red-400 hover:text-red-300">Sign Out</button>
         </div>

@@ -202,3 +202,34 @@ CREATE TABLE IF NOT EXISTS audit_logs (
 );
 
 SELECT 'Farmer Module tables created successfully ✅' as result;
+
+-- ═══════════════════════════════════════════════════════
+-- USER MANAGEMENT ENHANCEMENT — Run this in Supabase SQL Editor
+-- ═══════════════════════════════════════════════════════
+
+-- Add new columns to users table
+ALTER TABLE users ADD COLUMN IF NOT EXISTS "isActive"       BOOLEAN     NOT NULL DEFAULT true;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS "isLocked"       BOOLEAN     NOT NULL DEFAULT false;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS "lastLoginAt"    TIMESTAMP;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS "loginAttempts"  INTEGER     NOT NULL DEFAULT 0;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS "resetOtpHash"   TEXT;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS "resetOtpExpiry" TIMESTAMP;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS "deletedAt"      TIMESTAMP;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS "deletedById"    TEXT;
+ALTER TABLE users ADD COLUMN IF NOT EXISTS "deleteReason"   TEXT;
+
+-- Add soft delete to farmers
+ALTER TABLE farmers ADD COLUMN IF NOT EXISTS "deletedAt"    TIMESTAMP;
+ALTER TABLE farmers ADD COLUMN IF NOT EXISTS "deletedById"  TEXT;
+ALTER TABLE farmers ADD COLUMN IF NOT EXISTS "deleteReason" TEXT;
+
+-- Add new roles to Role enum
+DO $$ BEGIN
+  ALTER TYPE "Role" ADD VALUE IF NOT EXISTS 'SUPER_ADMIN';
+  ALTER TYPE "Role" ADD VALUE IF NOT EXISTS 'FIELD_OFFICER';
+  ALTER TYPE "Role" ADD VALUE IF NOT EXISTS 'DATA_ENTRY';
+  ALTER TYPE "Role" ADD VALUE IF NOT EXISTS 'PROJECT_MANAGER';
+  ALTER TYPE "Role" ADD VALUE IF NOT EXISTS 'AUDITOR';
+EXCEPTION WHEN others THEN NULL; END $$;
+
+SELECT 'User Management columns added successfully ✅' as result;

@@ -10,18 +10,30 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String    @unique
-  emailVerified DateTime?
-  mobile        String?
-  address       String?
-  pan           String?
-  password      String?
-  role          Role      @default(DONOR)
-  image         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  id             String    @id @default(cuid())
+  name           String?
+  email          String    @unique
+  emailVerified  DateTime?
+  mobile         String?
+  address        String?
+  pan            String?
+  password       String?
+  role           Role      @default(DONOR)
+  image          String?
+  // Extended fields
+  isActive       Boolean   @default(true)
+  isLocked       Boolean   @default(false)
+  lastLoginAt    DateTime?
+  loginAttempts  Int       @default(0)
+  // Password reset
+  resetOtpHash   String?
+  resetOtpExpiry DateTime?
+  // Soft delete
+  deletedAt      DateTime?
+  deletedById    String?
+  deleteReason   String?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
 
   donations  Donation[]
   accounts   Account[]
@@ -181,6 +193,11 @@ model Certificate {
 enum Role {
   DONOR
   ADMIN
+  SUPER_ADMIN
+  FIELD_OFFICER
+  DATA_ENTRY
+  PROJECT_MANAGER
+  AUDITOR
 }
 
 enum PaymentStatus {
@@ -252,6 +269,10 @@ model Farmer {
   inspections      SiteInspection[]
   auditLogs        AuditLog[]
   carbonCredits    CarbonCredit[]
+  // Soft delete
+  deletedAt        DateTime?
+  deletedById      String?
+  deleteReason     String?
   createdAt        DateTime       @default(now())
   updatedAt        DateTime       @updatedAt
 

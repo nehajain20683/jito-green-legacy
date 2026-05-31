@@ -58,15 +58,21 @@ function LoginForm() {
           <form onSubmit={handleSubmit} className="space-y-5">
             {error && <div className="bg-red-50 border border-red-200 text-red-700 text-sm rounded-xl p-3">{error}</div>}
             <div>
-              <label className="block text-sm font-medium text-forest-700 mb-1">Email</label>
+              <div className="flex justify-between items-center mb-1">
+                  <label className="block text-sm font-medium text-forest-700 mb-1">Email</label>
               <input type="email" required value={form.email}
                 onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
                 className="w-full border border-sage-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-sage-400"
                 placeholder="you@example.com" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-forest-700 mb-1">Password</label>
-              <input type="password" required value={form.password}
+              <div className="flex justify-between items-center mb-1">
+                  <label className="block text-sm font-medium text-forest-700 mb-1">Password</label>
+              <input type="password"
+                  />
+                  <Link href="/auth/forgot-password" className="text-xs text-sage-500 hover:text-sage-700 hover:underline">Forgot Password?</Link>
+                </div>
+                <input type="password" required value={form.password}
                 onChange={e => setForm(f => ({ ...f, password: e.target.value }))}
                 className="w-full border border-sage-200 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-sage-400"
                 placeholder="••••••••" />
