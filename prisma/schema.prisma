@@ -234,8 +234,10 @@ model Farmer {
   mobile           String         @unique
   alternateMobile  String?
   email            String?
+  password         String?
   otpHash          String?
   otpExpiry        DateTime?
+  lastLoginAt      DateTime?
   // Personal
   fullName         String
   fatherName       String?
@@ -269,6 +271,11 @@ model Farmer {
   inspections      SiteInspection[]
   auditLogs        AuditLog[]
   carbonCredits    CarbonCredit[]
+  // Ownership tracking
+  createdById      String?
+  updatedById      String?
+  approvedById     String?
+  assignedAdminId  String?
   // Soft delete
   deletedAt        DateTime?
   deletedById      String?

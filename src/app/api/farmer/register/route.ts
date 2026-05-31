@@ -1,3 +1,4 @@
+import bcrypt from 'bcryptjs';
 export const runtime = 'nodejs';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
@@ -23,6 +24,7 @@ const schema = z.object({
   bankName:        z.string().optional(),
   accountNumber:   z.string().optional(),
   ifscCode:        z.string().optional(),
+  password:        z.string().optional(),
 });
 
 // Convert empty strings to undefined, and parse dateOfBirth properly
@@ -50,6 +52,10 @@ export async function POST(req: Request) {
     const raw  = await req.json();
     const data = schema.parse(raw);
     const safe = sanitize(data);
+  // Hash password if provided
+  if (safe.password) {
+    safe.password = await bcrypt.hash(safe.password, 12);
+  }
 
     const saveData = {
       fullName:        safe.fullName,
@@ -70,6 +76,7 @@ export async function POST(req: Request) {
       bankName:        safe.bankName,
       accountNumber:   safe.accountNumber,
       ifscCode:        safe.ifscCode,
+      ...(safe.password ? { password: safe.password } : {}),
     };
 
     const farmer = await prisma.farmer.upsert({

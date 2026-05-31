@@ -233,3 +233,15 @@ DO $$ BEGIN
 EXCEPTION WHEN others THEN NULL; END $$;
 
 SELECT 'User Management columns added successfully ✅' as result;
+
+-- ═══════════════════════════════════════════════════════
+-- FARMER AUTH & TRACKING — Run in Supabase SQL Editor
+-- ═══════════════════════════════════════════════════════
+ALTER TABLE farmers ADD COLUMN IF NOT EXISTS "password"        TEXT;
+ALTER TABLE farmers ADD COLUMN IF NOT EXISTS "lastLoginAt"     TIMESTAMP;
+ALTER TABLE farmers ADD COLUMN IF NOT EXISTS "createdById"     TEXT;
+ALTER TABLE farmers ADD COLUMN IF NOT EXISTS "updatedById"     TEXT;
+ALTER TABLE farmers ADD COLUMN IF NOT EXISTS "approvedById"    TEXT;
+ALTER TABLE farmers ADD COLUMN IF NOT EXISTS "assignedAdminId" TEXT;
+
+SELECT 'Farmer auth columns added ✅' as result;

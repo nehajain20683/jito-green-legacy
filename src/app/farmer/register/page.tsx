@@ -314,11 +314,26 @@ export default function FarmerRegisterPage() {
                 {INDIAN_STATES.map(s => <option key={s} value={s}>{s}</option>)}
               </select>
             </div>
+            {/* Password */}
+            <div>
+              <label className={labelCls}>Set Password *</label>
+              <input type="password" placeholder="Min 8 characters"
+                value={password} onChange={e=>setPassword(e.target.value)} className={inputCls}/>
+            </div>
+            <div>
+              <label className={labelCls}>Confirm Password *</label>
+              <input type="password" placeholder="Repeat password"
+                value={confirmPw} onChange={e=>setConfirmPw(e.target.value)} className={inputCls}/>
+              {confirmPw && password !== confirmPw && (
+                <p className="text-red-500 text-xs mt-1">Passwords do not match</p>
+              )}
+            </div>
+
             <div className="flex gap-3 pt-2">
               <button onClick={() => setStep(1)} className="flex-1 border border-sage-300 text-sage-700 font-semibold py-3 rounded-xl">
                 <ChevronLeft className="w-4 h-4 inline mr-1"/>Back
               </button>
-              <button onClick={() => setStep(3)} disabled={!personal.fullName}
+              <button onClick={() => setStep(3)} disabled={!personal.fullName || !password || password !== confirmPw}
                 className="flex-2 flex-grow bg-sage-700 hover:bg-sage-800 text-white font-bold py-3 rounded-xl disabled:opacity-60">
                 Next<ChevronRight className="w-4 h-4 inline ml-1"/>
               </button>

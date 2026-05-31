@@ -16,7 +16,13 @@ function DonateForm() {
 
   const initType     = (params.get('type') || 'campaign') as 'campaign' | 'individual';
   const initCampaign = params.get('campaign') || 'maa';
-  const initTrees    = parseInt(params.get('trees') || '54');
+  const initTrees = (() => {
+    const t = params.get('trees');
+    if (t) return parseInt(t);
+    // Default recommended trees per campaign
+    const defaults: Record<string,number> = { dadi:108, maa:54, beti:27, poti:11, individual:1 };
+    return defaults[initCampaign] || 54;
+  })();
   const initAmount   = parseFloat(params.get('amount') || '24300');
 
   const [donationType, setDonationType]     = useState<'campaign'|'individual'>(initType);
@@ -24,7 +30,7 @@ function DonateForm() {
   const [selectedTrees, setSelectedTrees]   = useState(initTrees);
   const [amount, setAmount]                 = useState(initAmount);
   const [customTrees, setCustomTrees]       = useState(1);
-  const [form, setForm] = useState({ name:'', email:'', mobile:'', address:'', pan:'', dedicationName:'', chapter:'' });
+  const [form, setForm] = useState({ name:'', email:'', mobile:'', address:'', pan:'', dedicationName:'', chapter:'', chapterCustom:'' });
   const [dbCampaigns, setDbCampaigns]       = useState<any[]>([]);
   const [loading, setLoading]               = useState(false);
   const [error, setError]                   = useState('');
@@ -75,7 +81,7 @@ function DonateForm() {
           donorAddress: form.address, donorPan: form.pan,
           dedicationName: form.dedicationName,
           dedicationType: donationType==='individual'?'OTHER':selectedCampaign.toUpperCase(),
-          chapter: form.chapter,
+          chapter: (form.chapter === 'Other JITO Chapter' || form.chapter === 'Others' || form.chapter === 'Non Member') && form.chapterCustom ? `${form.chapter} — ${form.chapterCustom}` : form.chapter,
         }),
       });
       const order = await orderRes.json();
@@ -238,22 +244,46 @@ function DonateForm() {
                     <label className="block text-sm text-sage-700 font-medium mb-1">Select JITO Chapter *</label>
                     <select
                       value={form.chapter}
-                      onChange={e=>setForm(p=>({...p,chapter:e.target.value}))}
+                      onChange={e=>setForm(p=>({...p,chapter:e.target.value,chapterCustom:''}))}
                       className={inputCls}>
                       <option value="">-- Select Your Chapter --</option>
                       <option value="Mumbai Zone">Mumbai Zone</option>
-                      <option value="Goregaon">Goregaon</option>
-                      <option value="Mulund">Mulund</option>
-                      <option value="Queen's Necklace">Queen's Necklace</option>
-                      <option value="Walkeshwar">Walkeshwar</option>
-                      <option value="Midtown">Midtown</option>
-                      <option value="Juhu">Juhu</option>
-                      <option value="Ghatkopar">Ghatkopar</option>
-                      <option value="Gowalia Tank">Gowalia Tank</option>
-                      <option value="Navi Mumbai">Navi Mumbai</option>
-                      <option value="Thane">Thane</option>
-                      <option value="Kalyan / Dombivali">Kalyan / Dombivali</option>
+                      <optgroup label="JITO Chapters">
+                        <option value="Ghatkopar Chapter">Ghatkopar Chapter</option>
+                        <option value="Goregaon Chapter">Goregaon Chapter</option>
+                        <option value="Gowalia Tank Chapter">Gowalia Tank Chapter</option>
+                        <option value="Kalyan-Dombivali Chapter">Kalyan-Dombivali Chapter</option>
+                        <option value="Midtown Chapter">Midtown Chapter</option>
+                        <option value="Mulund Chapter">Mulund Chapter</option>
+                        <option value="Navi Mumbai Chapter">Navi Mumbai Chapter</option>
+                        <option value="Queen's Necklace Chapter">Queen's Necklace Chapter</option>
+                        <option value="Thane Chapter">Thane Chapter</option>
+                        <option value="Walkeshwar Chapter">Walkeshwar Chapter</option>
+                      </optgroup>
+                      <optgroup label="Other">
+                        <option value="Other JITO Chapter">Other JITO Chapter</option>
+                        <option value="Non Member">Non Member</option>
+                        <option value="Others">Others</option>
+                      </optgroup>
                     </select>
+                    {form.chapter === 'Other JITO Chapter' && (
+                      <input type="text" placeholder="Enter your JITO Chapter name *" required
+                        value={form.chapterCustom || ''}
+                        onChange={e=>setForm(p=>({...p,chapterCustom:e.target.value}))}
+                        className={inputCls + " mt-2"}/>
+                    )}
+                    {form.chapter === 'Others' && (
+                      <input type="text" placeholder="Enter your Organisation / Group name *" required
+                        value={form.chapterCustom || ''}
+                        onChange={e=>setForm(p=>({...p,chapterCustom:e.target.value}))}
+                        className={inputCls + " mt-2"}/>
+                    )}
+                    {form.chapter === 'Non Member' && (
+                      <input type="text" placeholder="Your organisation name (optional)"
+                        value={form.chapterCustom || ''}
+                        onChange={e=>setForm(p=>({...p,chapterCustom:e.target.value}))}
+                        className={inputCls + " mt-2"}/>
+                    )}
                     <p className="text-sage-400 text-xs mt-1">Your chapter will appear on your certificate.</p>
                   </div>
                 <div className="sm:col-span-2">
