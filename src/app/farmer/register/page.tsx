@@ -35,7 +35,9 @@ export default function FarmerRegisterPage() {
   // Form state
   const [mobile, setMobile] = useState('');
   const [otp, setOtp] = useState('');
-  const [devOtp, setDevOtp] = useState('');
+  const [devOtp, setDevOtp]   = useState('');
+  const [password, setPassword]   = useState('');
+  const [confirmPw, setConfirmPw] = useState('');
 
   const [personal, setPersonal] = useState({
     fullName: '', fatherName: '', dateOfBirth: '', gender: '',
