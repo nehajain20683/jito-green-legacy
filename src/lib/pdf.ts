@@ -1,5 +1,5 @@
 // src/lib/pdf.ts — JITO Green Legacy · Light Premium Theme · v3
-import { JITO_LOGO_B64, ENV_LOGO_B64, MZ_LOGO_B64 } from './logo-data';
+import { JITO_LOGO_B64, ENV_LOGO_B64, MZ_LOGO_B64, BNZ_LOGO_B64 } from './logo-data';
 
 // ─── Tier badge from tree count ───────────────────────────────────────────────
 function getTierBadge(trees: number): { badge: string; emoji: string; badgeEn: string } {
@@ -59,7 +59,7 @@ export function generateReceiptPDF(data: {
     .tax-note{font-size:10px;color:#448039;text-align:center;margin:14px 0;font-style:italic;line-height:1.6}
     .footer-bar{border-top:1px solid #eaf2e6;padding-top:12px;margin-top:16px;display:flex;align-items:center;justify-content:space-between}
     .footer-text{text-align:center;font-size:10px;color:#448039;flex:1}
-    .logo-mz{width:53px;height:53px;object-fit:contain}
+    .logo-mz{width:53px;height:auto;object-fit:contain}
     .watermark{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-30deg);font-family:'EB Garamond',serif;font-size:64px;color:rgba(68,128,57,.04);font-weight:900;text-transform:uppercase;pointer-events:none;white-space:nowrap}
   </style>
 </head>
@@ -160,7 +160,7 @@ export function generateCertificatePDF(data: {
     }
 
     /* Borders */
-    .outer-border { position:absolute; inset:12px; border:2.5px solid #c9a84c; border-radius:2px; pointer-events:none; z-index:5; }
+    .outer-border { position:absolute; inset:12px; border:2.5px solid #c9a84c; border-radius:2px; pointer-events:none; z-index:5; box-sizing:border-box; }
     .inner-border { position:absolute; inset:18px; border:1px solid rgba(201,168,76,0.35); border-radius:1px; pointer-events:none; z-index:5; }
 
     /* Corners */
@@ -193,15 +193,15 @@ export function generateCertificatePDF(data: {
 
     /* Centre header text — sits between logos */
     .center-header {
-      position:absolute; top:30px; left:174px; right:162px;
+      position:absolute; top:42px; left:174px; right:162px;
       text-align:center; z-index:20;
     }
     .org-eyebrow {
-      font-family:'Cinzel',serif; font-size:12px; letter-spacing:4px;
+      font-family:'Cinzel',serif; font-size:13px; letter-spacing:4px;
       color:#8a9e3a; text-transform:uppercase; display:block; margin-bottom:4px;
     }
     .org-tagline {
-      font-size:10.5px; color:#6a8050; letter-spacing:0.3px;
+      font-size:11.5px; color:#6a8050; letter-spacing:0.3px;
       font-family:'DM Sans',sans-serif;
     }
 
@@ -209,7 +209,7 @@ export function generateCertificatePDF(data: {
     .content {
       position:absolute;
       /* Start below logos ~120px, stop above bottom border ~26px */
-      top:128px; left:36px; right:36px; bottom:30px;
+      top:140px; left:36px; right:36px; bottom:28px;
       display:flex; flex-direction:column; align-items:center;
       justify-content:space-between; text-align:center;
     }
@@ -280,7 +280,7 @@ export function generateCertificatePDF(data: {
     .seal-left { width:50px; height:50px; border:2px solid #c9a84c; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:22px; margin:0 auto 4px; background:#fffef0; box-shadow:0 2px 8px rgba(201,168,76,.15); }
 
     /* Right seal — Mumbai Zone logo */
-    .seal-mz { width:58px; height:58px; object-fit:contain; display:block; margin:0 auto 4px; }
+    .seal-mz { width:96px; height:auto; object-fit:contain; display:block; margin:0 auto 4px; }
 
     @media screen and (max-width:1200px) {
       html, body { width:100%; height:auto; overflow:auto; }
@@ -294,6 +294,7 @@ export function generateCertificatePDF(data: {
       .impact-row { flex-wrap:wrap; gap:10px; }
     }
 
+    @page { size: A4 landscape; margin: 0; }
     @media print {
       html, body { width:297mm; height:210mm; }
       .page { width:297mm; height:210mm; }

@@ -14,7 +14,7 @@ export default function Footer() {
           {/* Brand */}
           <div className="lg:col-span-2">
             <div className="flex items-center gap-3 mb-4">
-              <Image src="/logos/jito-logo.png" alt="JITO" width={48} height={48} className="w-12 h-12 object-contain"/>
+              <Image src="/logos/jito-logo.png" alt="JITO" width={52} height={52} className="w-13 h-13 object-contain"/>
               <div>
                 <div className="font-display font-bold text-lg">JITO Green Legacy</div>
                 <div className="text-sage-400 text-xs">A Family Tree Plantation Drive by Mumbai Zone</div>
@@ -85,7 +85,7 @@ export default function Footer() {
       {/* Mumbai Zone Logo + Divider */}
       <div className="border-t border-forest-900">
         <div className="max-w-6xl mx-auto px-4 py-8 text-center">
-          <Image src="/logos/mumbai-zone-logo.jpg" alt="JITO Mumbai Zone"
+          <Image src="/logos/mumbai-zone-logo.png" alt="JITO Mumbai Zone"
             width={200} height={80} className="mx-auto mb-4 h-16 w-auto object-contain"/>
           <p className="text-sage-500 text-xs">JITO Mumbai Zone · Environment & Sustainability Wing</p>
         </div>
@@ -100,7 +100,7 @@ export default function Footer() {
           <a href="https://www.bnzgreen.io" target="_blank" rel="noopener noreferrer"
             className="flex items-center gap-2 group bg-white rounded-xl px-3 py-2 shadow-sm hover:shadow-md transition-shadow">
             <span className="text-gray-500 text-xs whitespace-nowrap">Powered by</span>
-            <Image src="/logos/bnz-logo.png" alt="BNZ Green Technologies"
+            <Image src="/logos/bnz-logo.png" alt="BNZ Now"
               width={64} height={32} className="h-8 w-auto object-contain"/>
             <span className="text-gray-600 text-xs font-semibold whitespace-nowrap">BNZ Green Technologies</span>
           </a>

@@ -41,16 +41,11 @@ function CampaignCard({ c }: { c: typeof CAMPAIGNS[0] }) {
               <button
                 key={pkg.id}
                 onClick={() => setSelected(pkg.trees)}
-                className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl border text-sm transition-all relative ${
+                className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl border text-sm transition-all ${
                   isSelected
                     ? 'border-sage-600 bg-sage-50 ring-1 ring-sage-400'
                     : 'border-sage-100 hover:border-sage-300 hover:bg-sage-50/50'
                 }`}>
-                {isSelected && CAMPAIGN_DEFAULTS[c.slug] === pkg.trees && (
-                  <span className="absolute -top-2.5 left-3 bg-sage-700 text-white text-[9px] font-bold px-2 py-0.5 rounded-full">
-                    ⭐ Recommended
-                  </span>
-                )}
                 <span className="font-semibold text-sage-900">
                   {pkg.emoji} {pkg.trees} Trees
                   <span className="text-sage-500 font-normal text-xs ml-1.5">· {pkg.badge} {pkg.badgeEn}</span>
