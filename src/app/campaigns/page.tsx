@@ -49,15 +49,8 @@ function CampaignCard({ c }: { c: typeof CAMPAIGNS[0] }) {
                     ? 'border-sage-600 bg-sage-50 ring-1 ring-sage-400'
                     : 'border-sage-100 hover:border-sage-300 hover:bg-sage-50/50'
                 }`}>
-                {/* Recommended badge */}
-                {isSelected && CAMPAIGN_DEFAULTS[c.slug] === pkg.trees && (
-                  <span className="absolute -top-2.5 left-3 bg-sage-700 text-white text-[9px] font-bold px-2 py-0.5 rounded-full">
-                    ⭐ Recommended
-                  </span>
-                )}
-                <span className="font-semibold text-sage-900">
-                  {pkg.emoji} {pkg.trees} Trees
-                  <span className="text-sage-500 font-normal text-xs ml-1.5">· {pkg.badge} {pkg.badgeEn}</span>
+                <span className="font-semibold text-sage-900 flex items-center gap-1.5">
+                  {isSelected ? pkg.emoji : ''} {pkg.trees} Trees
                 </span>
                 <span className={`font-bold ${isSelected ? 'text-sage-700' : 'text-sage-600'}`}>
                   {formatCurrency(pkg.price)}
@@ -101,9 +94,7 @@ export default function CampaignsPage() {
           {CAMPAIGN_PACKAGES.map(pkg => (
             <div key={pkg.id} className="flex items-center gap-2 bg-white border border-sage-100 rounded-full px-4 py-2 text-sm shadow-sm">
               <span>{pkg.emoji}</span>
-              <span className="font-semibold text-sage-900">{pkg.badge}</span>
-              <span className="text-sage-400">·</span>
-              <span className="text-sage-600">{pkg.trees} Trees</span>
+              <span className="font-semibold text-sage-900">{pkg.trees} Trees</span>
               <span className="text-sage-400">·</span>
               <span className="font-bold text-sage-700">{formatCurrency(pkg.price)}</span>
             </div>

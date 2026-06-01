@@ -25,8 +25,8 @@ function SuccessContent() {
   }, [donationId]);
 
   const appUrl      = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-  const certUrl     = `${appUrl}/api/certificates/${donationId}/pdf`;
-  const receiptUrl  = `${appUrl}/api/receipts/${donationId}/pdf`;
+  const certUrl     = `${appUrl}/certificate?id=${donationId}`;
+  const receiptUrl  = `${appUrl}/receipt?id=${donationId}`;
   const dashUrl     = `${appUrl}/dashboard`;
 
   function handleCopyLink() {
@@ -116,13 +116,13 @@ function SuccessContent() {
 
               {/* Download buttons */}
               <div className="space-y-2.5 mb-4">
-                <a href={receiptUrl} target="_blank"
+                <a href={receiptUrl} target="_blank" rel="noopener noreferrer"
                   className="flex items-center justify-center gap-2 border-2 border-sage-300 text-sage-700 hover:bg-sage-50 font-semibold py-3 rounded-xl transition-colors text-sm w-full">
-                  <Download className="w-4 h-4"/> Download Receipt
+                  <Download className="w-4 h-4"/> Download Receipt (PDF)
                 </a>
-                <a href={certUrl} target="_blank"
+                <a href={certUrl} target="_blank" rel="noopener noreferrer"
                   className="flex items-center justify-center gap-2 bg-sage-700 hover:bg-sage-800 text-white font-semibold py-3 rounded-xl transition-colors text-sm w-full">
-                  <Download className="w-4 h-4"/> Download Certificate
+                  <Download className="w-4 h-4"/> Download Certificate (PDF)
                 </a>
               </div>
 

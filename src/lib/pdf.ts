@@ -182,18 +182,18 @@ export function generateCertificatePDF(data: {
     /* ── Absolutely positioned logos ── */
     .logo-jito {
       position:absolute; top:26px; left:36px;
-      width:120px; height:96px;
+      width:126px; height:100px;
       object-fit:contain; background:transparent; z-index:20;
     }
     .logo-env {
       position:absolute; top:26px; right:36px;
-      width:108px; height:96px;   /* 90% of JITO */
+      width:107px; height:96px;   /* 90% of JITO */
       object-fit:contain; background:transparent; z-index:20;
     }
 
     /* Centre header text — sits between logos */
     .center-header {
-      position:absolute; top:30px; left:174px; right:162px;
+      position:absolute; top:30px; left:180px; right:162px;
       text-align:center; z-index:20;
     }
     .org-eyebrow {
@@ -205,11 +205,10 @@ export function generateCertificatePDF(data: {
       font-family:'DM Sans',sans-serif;
     }
 
-    /* ── Content — shifted up vs v2 ── */
+    /* ── Content — shifted down slightly per spec ── */
     .content {
       position:absolute;
-      /* Start below logos ~120px, stop above bottom border ~26px */
-      top:128px; left:36px; right:36px; bottom:30px;
+      top:138px; left:36px; right:36px; bottom:28px;
       display:flex; flex-direction:column; align-items:center;
       justify-content:space-between; text-align:center;
     }
@@ -221,11 +220,11 @@ export function generateCertificatePDF(data: {
 
     /* Certificate title — 2pt larger */
     .cert-title {
-      font-family:'Cinzel',serif; font-size:32px;
+      font-family:'Cinzel',serif; font-size:34px;
       font-weight:700; color:#1a2e0a; letter-spacing:2px; line-height:1.1;
     }
     .cert-sub {
-      font-family:'DM Sans',sans-serif; font-size:11px; letter-spacing:4px;
+      font-family:'DM Sans',sans-serif; font-size:13px; letter-spacing:4px;
       text-transform:uppercase; color:#7a9e3a;
     }
 
