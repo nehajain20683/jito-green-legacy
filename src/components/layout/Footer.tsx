@@ -97,11 +97,12 @@ export default function Footer() {
           <p className="text-sage-500 text-xs text-center sm:text-left">
             © {new Date().getFullYear()} JITO Green Legacy. All rights reserved. · JITO Mumbai Zone
           </p>
-          <a href="https://bnznow.com" target="_blank" rel="noopener noreferrer"
-            className="flex items-center gap-2 group">
-            <span className="text-sage-600 text-xs group-hover:text-sage-400 transition-colors">Powered by</span>
-            <Image src="/logos/bnz-logo.png" alt="BNZ Now"
-              width={56} height={28} className="h-7 w-auto object-contain opacity-70 group-hover:opacity-100 transition-opacity"/>
+          <a href="https://www.bnzgreen.io" target="_blank" rel="noopener noreferrer"
+            className="flex items-center gap-2 group bg-white rounded-xl px-3 py-2 shadow-sm hover:shadow-md transition-shadow">
+            <span className="text-gray-500 text-xs whitespace-nowrap">Powered by</span>
+            <Image src="/logos/bnz-logo.png" alt="BNZ Green Technologies"
+              width={64} height={32} className="h-8 w-auto object-contain"/>
+            <span className="text-gray-600 text-xs font-semibold whitespace-nowrap">BNZ Green Technologies</span>
           </a>
         </div>
       </div>
