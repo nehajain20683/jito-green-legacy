@@ -169,7 +169,7 @@ export function generateCertificatePDF(data: {
 
     /* ── Watermark — shifted up to sit behind impact metrics ── */
     .watermark {
-      position:absolute; top:52%; left:50%;
+      position:absolute; top:42%; left:50%;
       transform:translate(-50%,-50%);
       font-family:'Cinzel',serif; font-size:96px;
       color:rgba(138,158,58,0.045);
@@ -214,97 +214,100 @@ export function generateCertificatePDF(data: {
     }
 
     /* ── Gold divider ── */
-    .gold-divider { display:flex; align-items:center; gap:8px; width:100%; justify-content:center; }
-    .gold-line { flex:1; max-width:200px; height:1px; background:linear-gradient(to right,transparent,#c9a84c,transparent); }
-    .gold-diamond { width:6px; height:6px; background:#c9a84c; transform:rotate(45deg); flex-shrink:0; }
+    .gold-divider { display:flex; align-items:center; gap:8px; width:100%; justify-content:center; margin:3px 0; }
+    .gold-line { flex:1; max-width:220px; height:1px; background:linear-gradient(to right,transparent,#c9a84c,transparent); }
+    .gold-diamond { width:7px; height:7px; background:#c9a84c; transform:rotate(45deg); flex-shrink:0; }
 
-    /* ── Title block ── */
-    .title-block { text-align:center; }
+    /* ── Title block — with breathing room below logo area ── */
+    .title-block { margin-top:4px; margin-bottom:6px; }
     .cert-title {
-      font-family:'Cinzel',serif; font-size:28px;
-      font-weight:700; color:#1a2e0a; letter-spacing:2px; line-height:1.2;
+      font-family:'Cinzel',serif; font-size:30px;
+      font-weight:700; color:#1a2e0a; letter-spacing:2px; line-height:1.15;
     }
     .cert-sub {
-      font-family:'DM Sans',sans-serif; font-size:9.5px; letter-spacing:3.5px;
-      text-transform:uppercase; color:#7a9e3a; margin-top:3px; display:block;
+      font-family:'DM Sans',sans-serif; font-size:10px; letter-spacing:4px;
+      text-transform:uppercase; color:#7a9e3a; margin-top:4px;
     }
 
-    /* ── Recipient block — FOCAL POINT ── */
-    .recipient-block { text-align:center; }
+    /* ── Recipient block — focal point ── */
+    .recipient-block { margin:8px 0 6px; }
     .certifies-text {
-      font-family:'Playfair Display',serif; font-size:14px;
-      color:#5a7a3a; font-style:italic; display:block; margin-bottom:5px;
+      font-family:'Playfair Display',serif; font-size:15px;
+      color:#5a7a3a; font-style:italic; margin-bottom:6px; display:block;
     }
-    /* Name: 50px + 5pt = 55px */
     .donor-name {
-      font-family:'Playfair Display',serif; font-size:55px; font-weight:700;
+      font-family:'Playfair Display',serif; font-size:54px; font-weight:700;
       font-style:italic; color:#1a2e0a; line-height:1.0;
-      border-bottom:2.5px solid #c9a84c; padding-bottom:4px;
-      min-width:360px; display:inline-block;
+      border-bottom:2.5px solid #c9a84c; padding-bottom:5px;
+      min-width:380px; display:inline-block; margin-bottom:5px;
     }
     .chapter-line {
-      font-family:'DM Sans',sans-serif; font-size:16px;
-      font-weight:600; color:#7a9e3a; display:block; margin-top:5px;
+      font-family:'DM Sans',sans-serif; font-size:17px;
+      font-weight:600; color:#7a9e3a; display:block; margin-top:4px;
     }
 
     /* ── Body text ── */
     .body-text {
-      font-family:'Playfair Display',serif; font-size:14.5px;
-      color:#3a5a2a; line-height:1.5; max-width:740px;
+      font-family:'Playfair Display',serif; font-size:15px;
+      color:#3a5a2a; line-height:1.55; max-width:760px; margin:4px 0;
     }
     .text-highlight { color:#1a2e0a; font-weight:700; }
-    .text-dedication { color:#7a9e3a; font-style:italic; font-size:15px; }
+    .text-dedication { color:#7a9e3a; font-style:italic; font-size:16px; }
 
-    /* ── Badge ── */
-    .badge-wrap { }
+    /* ── Badge — slightly lower, natural gap ── */
+    .badge-wrap { margin:6px 0 4px; }
     .badge {
-      display:inline-block; border:1.5px solid #c9a84c; border-radius:50px;
-      padding:5px 24px; font-family:'Cinzel',serif; font-size:11.5px; letter-spacing:2.5px;
+      display:inline-block; border:2px solid #c9a84c; border-radius:50px;
+      padding:5px 26px; font-family:'Cinzel',serif; font-size:12px; letter-spacing:2.5px;
       text-transform:uppercase; color:#8a7020;
       background:linear-gradient(135deg,#fffef0 0%,#fdf8e1 100%);
       box-shadow:0 2px 8px rgba(201,168,76,0.18);
     }
 
-    /* ── Impact row — joined, equal widths ── */
+    /* ── Impact row — equal widths, equal spacing ── */
     .impact-row {
-      display:flex; gap:0; justify-content:center; width:80%; max-width:580px;
+      display:flex; gap:0; justify-content:center; width:100%; margin:4px 0;
     }
     .impact-item {
-      flex:1; text-align:center; padding:7px 4px;
-      background:#f4f8f0; border:1px solid #d0e0c0;
+      text-align:center; padding:6px 0;
+      background:#f4f8f0; border:1px solid #d0e0c0; border-radius:0;
+      flex:1; max-width:180px;
       border-right:none;
     }
-    .impact-item:first-child { border-radius:8px 0 0 8px; }
-    .impact-item:last-child  { border-radius:0 8px 8px 0; border-right:1px solid #d0e0c0; }
+    .impact-item:first-child { border-radius:10px 0 0 10px; }
+    .impact-item:last-child  { border-radius:0 10px 10px 0; border-right:1px solid #d0e0c0; }
     .impact-number {
-      font-family:'Cinzel',serif; font-size:18px; font-weight:700;
+      font-family:'Cinzel',serif; font-size:19px; font-weight:700;
       color:#264422; display:block; line-height:1.15;
     }
-    .co2-arrow { color:#4a8a3a; font-weight:900; }
+    .co2-arrow { color:#4a8a3a; font-size:18px; font-weight:900; margin-right:1px; }
     .impact-label {
-      font-family:'DM Sans',sans-serif; font-size:7.5px; color:#7a9e3a;
+      font-family:'DM Sans',sans-serif; font-size:8px; color:#7a9e3a;
       text-transform:uppercase; letter-spacing:1.5px; margin-top:2px; display:block;
     }
 
-    /* ── Footer ── */
+    /* ── Footer — pushed up naturally via flex ── */
     .cert-footer {
       width:100%; display:flex; justify-content:space-between; align-items:center;
-      border-top:1px solid #e0eccc; padding-top:6px;
+      border-top:1px solid #e0eccc; padding-top:7px; margin-top:4px;
+      flex-shrink:0;
     }
     .footer-item { text-align:center; flex:1; }
     .footer-label {
-      font-family:'DM Sans',sans-serif; font-size:7.5px; color:#8a9e3a;
-      text-transform:uppercase; letter-spacing:1.5px; display:block; margin-bottom:2px;
+      font-family:'DM Sans',sans-serif; font-size:8px; color:#8a9e3a;
+      text-transform:uppercase; letter-spacing:2px; display:block; margin-bottom:2px;
     }
-    .footer-value { font-family:'DM Sans',sans-serif; font-size:9.5px; color:#264422; font-weight:600; }
+    .footer-value { font-family:'DM Sans',sans-serif; font-size:10px; color:#264422; font-weight:600; }
 
+    /* Verified plantation seal */
     .seal-left {
-      width:40px; height:40px; border:1.5px solid #c9a84c; border-radius:50%;
-      display:flex; align-items:center; justify-content:center; font-size:18px;
-      margin:0 auto 3px; background:#fffef0;
+      width:44px; height:44px; border:2px solid #c9a84c; border-radius:50%;
+      display:flex; align-items:center; justify-content:center; font-size:20px;
+      margin:0 auto 3px; background:#fffef0; box-shadow:0 2px 6px rgba(201,168,76,.12);
     }
-    /* Mumbai Zone: 96 * 1.20 = 115px */
-    .seal-mz { width:115px; height:auto; object-fit:contain; display:block; margin:0 auto 2px; }
+
+    /* Mumbai Zone logo: +20% from 96 = ~115px */
+    .seal-mz { width:115px; height:auto; object-fit:contain; display:block; margin:0 auto 3px; }
 
     @media screen and (max-width:1200px) {
       html, body { width:100%; height:auto; overflow:auto; }
