@@ -142,8 +142,7 @@ export function generateCertificatePDF(data: {
     *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
 
     html, body {
-      width: 1123px;
-      height: 794px;
+      width: 1123px; height: 794px;
       background: #fffef9;
       font-family: 'DM Sans', sans-serif;
       -webkit-print-color-adjust: exact;
@@ -152,146 +151,172 @@ export function generateCertificatePDF(data: {
     }
 
     .page {
-      width: 1123px;
-      height: 794px;
+      width: 1123px; height: 794px;
       background: #fffef9;
-      position: relative;
-      overflow: hidden;
+      position: relative; overflow: hidden;
     }
 
-    /* Borders */
+    /* ── Borders ── */
     .outer-border { position:absolute; inset:12px; border:2.5px solid #c9a84c; border-radius:2px; pointer-events:none; z-index:5; box-sizing:border-box; }
     .inner-border { position:absolute; inset:18px; border:1px solid rgba(201,168,76,0.35); border-radius:1px; pointer-events:none; z-index:5; }
 
-    /* Corners */
-    .corner { position:absolute; width:48px; height:48px; z-index:6; }
-    .c-tl { top:26px;  left:26px;  border-top:2px solid #8a9e3a; border-left:2px solid #8a9e3a; }
-    .c-tr { top:26px;  right:26px; border-top:2px solid #8a9e3a; border-right:2px solid #8a9e3a; }
-    .c-bl { bottom:26px; left:26px;  border-bottom:2px solid #8a9e3a; border-left:2px solid #8a9e3a; }
-    .c-br { bottom:26px; right:26px; border-bottom:2px solid #8a9e3a; border-right:2px solid #8a9e3a; }
+    /* ── Corners ── */
+    .corner { position:absolute; width:46px; height:46px; z-index:6; }
+    .c-tl { top:24px;  left:24px;  border-top:2px solid #8a9e3a; border-left:2px solid #8a9e3a; }
+    .c-tr { top:24px;  right:24px; border-top:2px solid #8a9e3a; border-right:2px solid #8a9e3a; }
+    .c-bl { bottom:24px; left:24px;  border-bottom:2px solid #8a9e3a; border-left:2px solid #8a9e3a; }
+    .c-br { bottom:24px; right:24px; border-bottom:2px solid #8a9e3a; border-right:2px solid #8a9e3a; }
 
-    /* Watermark */
+    /* ── Watermark — shifted up to sit behind impact metrics ── */
     .watermark {
-      position:absolute; top:50%; left:50%;
+      position:absolute; top:52%; left:50%;
       transform:translate(-50%,-50%);
-      font-family:'Cinzel',serif; font-size:88px; color:rgba(138,158,58,0.04);
+      font-family:'Cinzel',serif; font-size:96px;
+      color:rgba(138,158,58,0.045);
       font-weight:700; text-transform:uppercase; pointer-events:none;
       white-space:nowrap; letter-spacing:10px; z-index:1;
     }
 
-    /* ── Absolutely positioned logos ── */
+    /* ── Logos ── */
+    /* JITO: +15% from 120 = 138px */
     .logo-jito {
-      position:absolute; top:26px; left:36px;
-      width:120px; height:96px;
+      position:absolute; top:24px; left:34px;
+      width:138px; height:auto;
       object-fit:contain; background:transparent; z-index:20;
     }
+    /* ENV: reduce to 20% of JITO = 28px wide (80% reduction) */
     .logo-env {
-      position:absolute; top:26px; right:36px;
-      width:88px; height:auto;   /* reduced per request */
+      position:absolute; top:30px; right:34px;
+      width:28px; height:auto;
       object-fit:contain; background:transparent; z-index:20;
     }
 
-    /* Centre header text — sits between logos */
+    /* ── Centre header — pushed 28px lower ── */
     .center-header {
-      position:absolute; top:42px; left:174px; right:162px;
+      position:absolute; top:56px; left:186px; right:80px;
       text-align:center; z-index:20;
     }
     .org-eyebrow {
       font-family:'Cinzel',serif; font-size:13px; letter-spacing:4px;
-      color:#8a9e3a; text-transform:uppercase; display:block; margin-bottom:4px;
+      color:#8a9e3a; text-transform:uppercase; display:block; margin-bottom:5px;
     }
     .org-tagline {
-      font-size:11.5px; color:#6a8050; letter-spacing:0.3px;
+      font-size:11px; color:#6a8050; letter-spacing:0.3px;
       font-family:'DM Sans',sans-serif;
     }
 
-    /* ── Content — shifted up vs v2 ── */
+    /* ── Content area — starts below header band ── */
     .content {
       position:absolute;
-      /* Start below logos ~120px, stop above bottom border ~26px */
-      top:140px; left:36px; right:36px; bottom:28px;
+      top:132px; left:34px; right:34px; bottom:26px;
       display:flex; flex-direction:column; align-items:center;
-      justify-content:space-between; text-align:center;
+      gap:0; text-align:center;
     }
 
-    /* Gold divider */
+    /* ── Gold divider ── */
     .gold-divider { display:flex; align-items:center; gap:8px; width:100%; justify-content:center; }
-    .gold-line { flex:1; max-width:220px; height:1px; background:linear-gradient(to right,transparent,#c9a84c,transparent); }
-    .gold-diamond { width:7px; height:7px; background:#c9a84c; transform:rotate(45deg); flex-shrink:0; }
+    .gold-line { flex:1; max-width:200px; height:1px; background:linear-gradient(to right,transparent,#c9a84c,transparent); }
+    .gold-diamond { width:6px; height:6px; background:#c9a84c; transform:rotate(45deg); flex-shrink:0; }
 
-    /* Certificate title — 2pt larger */
+    /* ── Title block ── */
+    .title-block { text-align:center; }
     .cert-title {
-      font-family:'Cinzel',serif; font-size:32px;
-      font-weight:700; color:#1a2e0a; letter-spacing:2px; line-height:1.1;
+      font-family:'Cinzel',serif; font-size:28px;
+      font-weight:700; color:#1a2e0a; letter-spacing:2px; line-height:1.2;
     }
     .cert-sub {
-      font-family:'DM Sans',sans-serif; font-size:11px; letter-spacing:4px;
-      text-transform:uppercase; color:#7a9e3a;
+      font-family:'DM Sans',sans-serif; font-size:9.5px; letter-spacing:3.5px;
+      text-transform:uppercase; color:#7a9e3a; margin-top:3px; display:block;
     }
 
-    /* Certifies */
-    .certifies-text { font-family:'Playfair Display',serif; font-size:16px; color:#5a7a3a; font-style:italic; }
-
-    /* Donor name */
+    /* ── Recipient block — FOCAL POINT ── */
+    .recipient-block { text-align:center; }
+    .certifies-text {
+      font-family:'Playfair Display',serif; font-size:14px;
+      color:#5a7a3a; font-style:italic; display:block; margin-bottom:5px;
+    }
+    /* Name: 50px + 5pt = 55px */
     .donor-name {
-      font-family:'Playfair Display',serif; font-size:50px; font-weight:700;
-      font-style:italic; color:#1a2e0a; line-height:1.05;
-      border-bottom:2px solid #c9a84c; padding-bottom:6px;
-      min-width:400px; display:inline-block;
+      font-family:'Playfair Display',serif; font-size:55px; font-weight:700;
+      font-style:italic; color:#1a2e0a; line-height:1.0;
+      border-bottom:2.5px solid #c9a84c; padding-bottom:4px;
+      min-width:360px; display:inline-block;
+    }
+    .chapter-line {
+      font-family:'DM Sans',sans-serif; font-size:16px;
+      font-weight:600; color:#7a9e3a; display:block; margin-top:5px;
     }
 
-    /* Chapter */
-    .chapter-line { font-family:'DM Sans',sans-serif; font-size:18px; font-weight:600; color:#7a9e3a; }
-
-    /* Body text */
-    .body-text { font-family:'Playfair Display',serif; font-size:16px; color:#3a5a2a; line-height:1.6; max-width:760px; }
+    /* ── Body text ── */
+    .body-text {
+      font-family:'Playfair Display',serif; font-size:14.5px;
+      color:#3a5a2a; line-height:1.5; max-width:740px;
+    }
     .text-highlight { color:#1a2e0a; font-weight:700; }
-    .text-dedication { color:#7a9e3a; font-style:italic; font-size:17px; }
+    .text-dedication { color:#7a9e3a; font-style:italic; font-size:15px; }
 
-    /* Tier badge */
+    /* ── Badge ── */
+    .badge-wrap { }
     .badge {
-      display:inline-block; border:2px solid #c9a84c; border-radius:50px;
-      padding:6px 28px; font-family:'Cinzel',serif; font-size:13px; letter-spacing:3px;
+      display:inline-block; border:1.5px solid #c9a84c; border-radius:50px;
+      padding:5px 24px; font-family:'Cinzel',serif; font-size:11.5px; letter-spacing:2.5px;
       text-transform:uppercase; color:#8a7020;
       background:linear-gradient(135deg,#fffef0 0%,#fdf8e1 100%);
-      box-shadow:0 2px 10px rgba(201,168,76,0.2);
+      box-shadow:0 2px 8px rgba(201,168,76,0.18);
     }
 
-    /* Impact */
-    .impact-row { display:flex; gap:24px; justify-content:center; }
+    /* ── Impact row — joined, equal widths ── */
+    .impact-row {
+      display:flex; gap:0; justify-content:center; width:80%; max-width:580px;
+    }
     .impact-item {
-      text-align:center; padding:7px 18px;
-      background:#f4f8f0; border:1px solid #d0e0c0; border-radius:10px; min-width:120px;
+      flex:1; text-align:center; padding:7px 4px;
+      background:#f4f8f0; border:1px solid #d0e0c0;
+      border-right:none;
     }
-    .impact-number { font-family:'Cinzel',serif; font-size:20px; font-weight:700; color:#264422; display:block; line-height:1.1; }
-    .co2-arrow { color:#4a8a3a; font-size:20px; font-weight:900; margin-right:2px; }
-    .impact-label { font-family:'DM Sans',sans-serif; font-size:9px; color:#7a9e3a; text-transform:uppercase; letter-spacing:1.5px; margin-top:2px; display:block; }
+    .impact-item:first-child { border-radius:8px 0 0 8px; }
+    .impact-item:last-child  { border-radius:0 8px 8px 0; border-right:1px solid #d0e0c0; }
+    .impact-number {
+      font-family:'Cinzel',serif; font-size:18px; font-weight:700;
+      color:#264422; display:block; line-height:1.15;
+    }
+    .co2-arrow { color:#4a8a3a; font-weight:900; }
+    .impact-label {
+      font-family:'DM Sans',sans-serif; font-size:7.5px; color:#7a9e3a;
+      text-transform:uppercase; letter-spacing:1.5px; margin-top:2px; display:block;
+    }
 
-    /* Footer row */
+    /* ── Footer ── */
     .cert-footer {
-      width:100%; display:flex; justify-content:space-between; align-items:flex-end;
-      border-top:1px solid #e0eccc; padding-top:8px;
+      width:100%; display:flex; justify-content:space-between; align-items:center;
+      border-top:1px solid #e0eccc; padding-top:6px;
     }
-    .footer-item { text-align:center; min-width:110px; }
-    .footer-label { font-family:'DM Sans',sans-serif; font-size:8px; color:#8a9e3a; text-transform:uppercase; letter-spacing:2px; display:block; margin-bottom:2px; }
-    .footer-value { font-family:'DM Sans',sans-serif; font-size:10px; color:#264422; font-weight:600; }
+    .footer-item { text-align:center; flex:1; }
+    .footer-label {
+      font-family:'DM Sans',sans-serif; font-size:7.5px; color:#8a9e3a;
+      text-transform:uppercase; letter-spacing:1.5px; display:block; margin-bottom:2px;
+    }
+    .footer-value { font-family:'DM Sans',sans-serif; font-size:9.5px; color:#264422; font-weight:600; }
 
-    /* Left seal — geo tag */
-    .seal-left { width:50px; height:50px; border:2px solid #c9a84c; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:22px; margin:0 auto 4px; background:#fffef0; box-shadow:0 2px 8px rgba(201,168,76,.15); }
-
-    /* Right seal — Mumbai Zone logo */
-    .seal-mz { width:96px; height:auto; object-fit:contain; display:block; margin:0 auto 4px; }
+    .seal-left {
+      width:40px; height:40px; border:1.5px solid #c9a84c; border-radius:50%;
+      display:flex; align-items:center; justify-content:center; font-size:18px;
+      margin:0 auto 3px; background:#fffef0;
+    }
+    /* Mumbai Zone: 96 * 1.20 = 115px */
+    .seal-mz { width:115px; height:auto; object-fit:contain; display:block; margin:0 auto 2px; }
 
     @media screen and (max-width:1200px) {
       html, body { width:100%; height:auto; overflow:auto; }
       .page { width:100%; height:auto; min-height:100vh; }
-      .logo-jito { width:80px; height:64px; }
-      .logo-env  { width:72px; height:64px; }
-      .center-header { left:124px; right:116px; }
-      .content { position:relative; top:auto; left:auto; right:auto; bottom:auto; padding:12px 24px 20px; }
-      .donor-name { font-size:36px; min-width:auto; width:100%; }
-      .cert-title { font-size:24px; }
-      .impact-row { flex-wrap:wrap; gap:10px; }
+      .logo-jito { width:90px; }
+      .logo-env  { width:22px; }
+      .center-header { left:140px; right:68px; }
+      .content { position:relative; top:auto; left:auto; right:auto; bottom:auto; padding:10px 20px 16px; }
+      .donor-name { font-size:38px; min-width:auto; width:100%; }
+      .cert-title { font-size:22px; }
+      .impact-row { flex-wrap:wrap; gap:6px; }
+      .impact-item { border-radius:8px !important; border-right:1px solid #d0e0c0 !important; min-width:100px; max-width:none; }
     }
 
     @page { size: A4 landscape; margin: 0; }
