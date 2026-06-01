@@ -110,10 +110,10 @@ export const CAMPAIGNS = [
 
 // Package options — ₹500 per tree
 export const CAMPAIGN_PACKAGES = [
-  { id: 'pkg-108', trees: 108, price: 54000, badge: 'Forest Patron', popular: false, description: 'The sacred 108 — create an entire forest in her name.' },
-  { id: 'pkg-54',  trees: 54,  price: 27000, badge: 'Grove Sponsor', popular: true,  description: 'A thriving grove that will outlast generations.' },
-  { id: 'pkg-27',  trees: 27,  price: 13500, badge: 'Family Grove',  popular: false, description: 'The auspicious number — a micro-forest of meaning.' },
-  { id: 'pkg-11',  trees: 11,  price: 5500,  badge: 'Family Pack',   popular: false, description: 'Eleven trees — one for every blessing she has given.' },
+  { id: 'pkg-108', trees: 108, price: 54000, badge: 'विरासत निर्माता', badgeEn: 'Diamond Legacy', emoji: '💎', popular: false, description: 'The sacred 108 — create an entire forest in her name.' },
+  { id: 'pkg-54',  trees: 54,  price: 27000, badge: 'समर्पित',         badgeEn: 'Platinum Legacy', emoji: '🏆', popular: true,  description: 'A thriving grove that will outlast generations.' },
+  { id: 'pkg-27',  trees: 27,  price: 13500, badge: 'संकल्पी',          badgeEn: 'Gold Legacy',    emoji: '🥇', popular: false, description: 'The auspicious number — a micro-forest of meaning.' },
+  { id: 'pkg-11',  trees: 11,  price: 5500,  badge: 'प्रेरक',           badgeEn: 'Silver Legacy',  emoji: '🥈', popular: false, description: 'Eleven trees — one for every blessing she has given.' },
 ];
 
 export const INDIVIDUAL_TREE_PRICE = 500;

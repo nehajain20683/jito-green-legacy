@@ -19,9 +19,9 @@ function DonateForm() {
   const initTrees = (() => {
     const t = params.get('trees');
     if (t) return parseInt(t);
-    // Default recommended trees per campaign
-    const defaults: Record<string,number> = { dadi:108, maa:54, beti:27, poti:11, individual:1 };
-    return defaults[initCampaign] || 54;
+    // Default recommended package per campaign (Dadi=108💎, Maa=54🏆, Beti=27🥇, Poti=11🥈)
+    const defaults: Record<string,number> = { dadi:108, maa:54, beti:27, poti:11, individual:11 };
+    return defaults[initCampaign] ?? 54;
   })();
   const initAmount   = parseFloat(params.get('amount') || '24300');
 
@@ -248,10 +248,11 @@ function DonateForm() {
                       className={inputCls}>
                       <option value="">-- Select Your Chapter --</option>
                       <option value="Mumbai Zone">Mumbai Zone</option>
-                      <optgroup label="JITO Chapters">
+                      <optgroup label="JITO Chapters (A-Z)">
                         <option value="Ghatkopar Chapter">Ghatkopar Chapter</option>
                         <option value="Goregaon Chapter">Goregaon Chapter</option>
                         <option value="Gowalia Tank Chapter">Gowalia Tank Chapter</option>
+                        <option value="Juhu Chapter">Juhu Chapter</option>
                         <option value="Kalyan-Dombivali Chapter">Kalyan-Dombivali Chapter</option>
                         <option value="Midtown Chapter">Midtown Chapter</option>
                         <option value="Mulund Chapter">Mulund Chapter</option>
@@ -260,9 +261,13 @@ function DonateForm() {
                         <option value="Thane Chapter">Thane Chapter</option>
                         <option value="Walkeshwar Chapter">Walkeshwar Chapter</option>
                       </optgroup>
+                      <optgroup label="Wings">
+                        <option value="Ladies Wing">Ladies Wing</option>
+                        <option value="Youth Wing">Youth Wing</option>
+                      </optgroup>
                       <optgroup label="Other">
                         <option value="Other JITO Chapter">Other JITO Chapter</option>
-                        <option value="Non Member">Non Member</option>
+                        <option value="Non JITO Member">Non JITO Member</option>
                         <option value="Others">Others</option>
                       </optgroup>
                     </select>

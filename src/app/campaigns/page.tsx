@@ -101,7 +101,7 @@ export default function CampaignsPage() {
                   </div>
                 )}
                 <div className={`font-display text-5xl font-bold mb-1 ${pkg.popular ? 'text-sage-200' : 'text-sage-700'}`}>{pkg.trees}</div>
-                <div className={`text-xs mb-3 font-semibold uppercase tracking-wide ${pkg.popular ? 'text-sage-400' : 'text-sage-400'}`}>{pkg.badge}</div>
+                <div className={`text-xs mb-3 font-semibold uppercase tracking-wide ${pkg.popular ? 'text-sage-400' : 'text-sage-400'}`}>{pkg.emoji} {pkg.badge} · {pkg.badgeEn}</div>
                 <div className={`font-bold text-2xl mb-1 ${pkg.popular ? 'text-white' : 'text-sage-900'}`}>{formatCurrency(pkg.price)}</div>
                 <div className={`text-xs mb-4 ${pkg.popular ? 'text-sage-400' : 'text-sage-400'}`}>{pkg.trees * 22}kg CO₂/year</div>
                 <Link href="/campaigns"

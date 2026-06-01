@@ -1,70 +1,111 @@
-// src/components/layout/Footer.tsx — Light theme
+// src/components/layout/Footer.tsx
 import Link from 'next/link';
-import { Mail, Phone, MapPin } from 'lucide-react';
-import { BRAND } from '@/lib/utils';
+import Image from 'next/image';
+import { Mail, Phone } from 'lucide-react';
 
 export default function Footer() {
   return (
-    <footer className="bg-sage-900 text-sage-200">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12">
-          <div className="md:col-span-2">
-            <div className="flex items-center gap-3 mb-5">
-              <div className="w-10 h-10 rounded-xl bg-sage-700 flex items-center justify-center">
-                <svg viewBox="0 0 36 36" fill="none" className="w-6 h-6">
-                  <ellipse cx="18" cy="13" rx="9" ry="8" fill="#a7d99e"/>
-                  <ellipse cx="13" cy="16" rx="6" ry="5" fill="#7db870"/>
-                  <ellipse cx="23" cy="16" rx="6" ry="5" fill="#5a9e4e"/>
-                  <ellipse cx="18" cy="10" rx="7" ry="6.5" fill="#c8e8c3"/>
-                  <rect x="16.5" y="21" width="3" height="9" rx="1.5" fill="#92613a"/>
-                </svg>
-              </div>
+    <footer className="bg-forest-950 text-white">
+
+      {/* Main footer */}
+      <div className="max-w-6xl mx-auto px-4 py-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+
+          {/* Brand */}
+          <div className="lg:col-span-2">
+            <div className="flex items-center gap-3 mb-4">
+              <Image src="/logos/jito-logo.png" alt="JITO" width={48} height={48} className="w-12 h-12 object-contain"/>
               <div>
-                <div className="font-display text-lg text-white font-bold">{BRAND.name}</div>
-                <div className="text-xs text-sage-400">{BRAND.tagline}</div>
+                <div className="font-display font-bold text-lg">JITO Green Legacy</div>
+                <div className="text-sage-400 text-xs">A Family Tree Plantation Drive by Mumbai Zone</div>
               </div>
             </div>
-            <p className="text-sage-400 text-sm leading-relaxed max-w-xs">
-              Every tree planted is a promise kept to nature and a living gift to the generations that follow.
+            <p className="text-sage-400 text-sm leading-relaxed mb-4 max-w-sm">
+              Creating India's largest community-led family plantation movement. Plant trees in the names of the women who shaped your life.
             </p>
-            <div className="mt-6 space-y-2.5 text-sm text-sage-400">
-              <div className="flex items-center gap-2"><Mail className="w-4 h-4 text-sage-500 flex-shrink-0"/> greenlegacy@jitomumbai.org</div>
-              <div className="flex items-center gap-2"><Phone className="w-4 h-4 text-sage-500 flex-shrink-0"/> +91 98765 43210</div>
-              <div className="flex items-center gap-2"><MapPin className="w-4 h-4 text-sage-500 flex-shrink-0"/> Mumbai, Maharashtra, India</div>
+            <div className="space-y-2">
+              <a href="mailto:mumbaizoneJES@jito.org" className="flex items-center gap-2 text-sage-300 hover:text-white text-sm transition-colors">
+                <Mail className="w-4 h-4 text-sage-500 flex-shrink-0"/>
+                mumbaizoneJES@jito.org
+              </a>
+              <a href="tel:+919137741905" className="flex items-center gap-2 text-sage-300 hover:text-white text-sm transition-colors">
+                <Phone className="w-4 h-4 text-sage-500 flex-shrink-0"/>
+                +91 91377 41905
+              </a>
             </div>
           </div>
 
+          {/* Quick Links */}
           <div>
-            <h4 className="text-white font-semibold mb-4 text-xs uppercase tracking-widest">Campaigns</h4>
-            <ul className="space-y-2.5 text-sm text-sage-400">
-              {['dadi','maa','beti','poti'].map(s => (
-                <li key={s}><Link href={`/campaigns/${s}`} className="hover:text-sage-200 transition-colors capitalize">Ek Ped {s.charAt(0).toUpperCase()+s.slice(1)} Ke Naam</Link></li>
+            <h3 className="font-semibold text-sm uppercase tracking-widest text-sage-400 mb-4">Quick Links</h3>
+            <ul className="space-y-2.5">
+              {[
+                { href:'/campaigns',  label:'Sponsor Trees' },
+                { href:'/about',      label:'About Us' },
+                { href:'/impact',     label:'Impact Dashboard' },
+                { href:'/contact',    label:'Contact Us' },
+                { href:'/csr',        label:'Corporate Support' },
+                { href:'/farmer/register', label:'Farmer Registration' },
+              ].map(l=>(
+                <li key={l.href}>
+                  <Link href={l.href} className="text-sage-400 hover:text-white text-sm transition-colors">
+                    {l.label}
+                  </Link>
+                </li>
               ))}
-              <li><Link href="/donate?type=individual" className="hover:text-sage-200 transition-colors">Individual Tree Sponsorship</Link></li>
             </ul>
           </div>
 
+          {/* Legal */}
           <div>
-            <h4 className="text-white font-semibold mb-4 text-xs uppercase tracking-widest">Platform</h4>
-            <ul className="space-y-2.5 text-sm text-sage-400">
-              <li><Link href="/campaigns" className="hover:text-sage-200 transition-colors">Sponsor Trees</Link></li>
-              <li><Link href="/impact" className="hover:text-sage-200 transition-colors">Impact Dashboard</Link></li>
-              <li><Link href="/csr" className="hover:text-sage-200 transition-colors">Corporate Support</Link></li>
-              <li><Link href="/dashboard" className="hover:text-sage-200 transition-colors">My Dashboard</Link></li>
-              <li><Link href="/auth/login" className="hover:text-sage-200 transition-colors">Sign In</Link></li>
+            <h3 className="font-semibold text-sm uppercase tracking-widest text-sage-400 mb-4">Legal</h3>
+            <ul className="space-y-2.5">
+              {[
+                { href:'/privacy-policy', label:'Privacy Policy' },
+                { href:'/terms',          label:'Terms & Conditions' },
+                { href:'/refund-policy',  label:'Refund Policy' },
+              ].map(l=>(
+                <li key={l.href}>
+                  <Link href={l.href} className="text-sage-400 hover:text-white text-sm transition-colors">
+                    {l.label}
+                  </Link>
+                </li>
+              ))}
             </ul>
-          </div>
-        </div>
 
-        <div className="border-t border-sage-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-sage-500">
-          <p>© {new Date().getFullYear()} {BRAND.name} · {BRAND.org}. All rights reserved.</p>
-          <div className="flex gap-6">
-            <Link href="/privacy" className="hover:text-sage-300">Privacy Policy</Link>
-            <Link href="/terms" className="hover:text-sage-300">Terms of Service</Link>
-            <Link href="/refund" className="hover:text-sage-300">Refund Policy</Link>
+            <h3 className="font-semibold text-sm uppercase tracking-widest text-sage-400 mb-4 mt-6">Tax Benefit</h3>
+            <p className="text-sage-500 text-xs leading-relaxed">
+              80G tax exemption under Income Tax Act, 1961.<br/>
+              Receipt issued instantly on donation.
+            </p>
           </div>
         </div>
       </div>
+
+      {/* Mumbai Zone Logo + Divider */}
+      <div className="border-t border-forest-900">
+        <div className="max-w-6xl mx-auto px-4 py-8 text-center">
+          <Image src="/logos/mumbai-zone-logo.jpg" alt="JITO Mumbai Zone"
+            width={200} height={80} className="mx-auto mb-4 h-16 w-auto object-contain"/>
+          <p className="text-sage-500 text-xs">JITO Mumbai Zone · Environment & Sustainability Wing</p>
+        </div>
+      </div>
+
+      {/* Bottom bar */}
+      <div className="border-t border-forest-900">
+        <div className="max-w-6xl mx-auto px-4 py-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+          <p className="text-sage-500 text-xs text-center sm:text-left">
+            © {new Date().getFullYear()} JITO Green Legacy. All rights reserved. · JITO Mumbai Zone
+          </p>
+          <a href="https://bnznow.com" target="_blank" rel="noopener noreferrer"
+            className="flex items-center gap-2 group">
+            <span className="text-sage-600 text-xs group-hover:text-sage-400 transition-colors">Powered by</span>
+            <Image src="/logos/bnz-logo.png" alt="BNZ Now"
+              width={56} height={28} className="h-7 w-auto object-contain opacity-70 group-hover:opacity-100 transition-opacity"/>
+          </a>
+        </div>
+      </div>
+
     </footer>
   );
 }

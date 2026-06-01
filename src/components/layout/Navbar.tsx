@@ -7,11 +7,11 @@ import { signOut, useSession } from 'next-auth/react';
 import { BRAND } from '@/lib/utils';
 
 const links = [
-  { href: '/#about',    label: 'About Initiative' },
+  { href: '/about',     label: 'About Us' },
   { href: '/campaigns', label: 'Sponsor Trees' },
   { href: '/impact',    label: 'Impact Dashboard' },
   { href: '/csr',       label: 'Corporate Support' },
-  { href: '/#contact',  label: 'Contact' },
+  { href: '/contact',   label: 'Contact' },
 ];
 
 export default function Navbar() {

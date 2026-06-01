@@ -6,6 +6,7 @@ const nextConfig = {
       { protocol: 'https', hostname: 'res.cloudinary.com' },
       { protocol: 'https', hostname: 'plus.unsplash.com' },
     ],
+    // Local images served from /public don't need remotePatterns
     formats: ['image/avif', 'image/webp'],
   },
   // Reduce Vercel serverless bundle size
