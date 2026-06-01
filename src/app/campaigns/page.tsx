@@ -18,12 +18,10 @@ const CAMPAIGN_DEFAULTS: Record<string, number> = {
 
 function CampaignCard({ c }: { c: typeof CAMPAIGNS[0] }) {
   const [selected, setSelected] = useState(CAMPAIGN_DEFAULTS[c.slug] ?? 54);
-
   const selectedPkg = CAMPAIGN_PACKAGES.find(p => p.trees === selected)!;
 
   return (
     <div className="group bg-white border border-sage-100 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl hover:shadow-sage-100 transition-all hover:-translate-y-1">
-      {/* Photo */}
       <div className="relative h-52 overflow-hidden">
         <Image src={c.image} alt={c.name} fill className="object-cover group-hover:scale-105 transition-transform duration-700"/>
         <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent"/>
@@ -36,7 +34,6 @@ function CampaignCard({ c }: { c: typeof CAMPAIGNS[0] }) {
       <div className="p-5">
         <p className="text-sage-600 text-xs leading-relaxed mb-4">{c.description}</p>
 
-        {/* Package rows — clickable */}
         <div className="space-y-2 mb-4">
           {CAMPAIGN_PACKAGES.map(pkg => {
             const isSelected = selected === pkg.trees;
@@ -49,8 +46,14 @@ function CampaignCard({ c }: { c: typeof CAMPAIGNS[0] }) {
                     ? 'border-sage-600 bg-sage-50 ring-1 ring-sage-400'
                     : 'border-sage-100 hover:border-sage-300 hover:bg-sage-50/50'
                 }`}>
-                <span className="font-semibold text-sage-900 flex items-center gap-1.5">
-                  {isSelected ? pkg.emoji : ''} {pkg.trees} Trees
+                {isSelected && CAMPAIGN_DEFAULTS[c.slug] === pkg.trees && (
+                  <span className="absolute -top-2.5 left-3 bg-sage-700 text-white text-[9px] font-bold px-2 py-0.5 rounded-full">
+                    ⭐ Recommended
+                  </span>
+                )}
+                <span className="font-semibold text-sage-900">
+                  {pkg.emoji} {pkg.trees} Trees
+                  <span className="text-sage-500 font-normal text-xs ml-1.5">· {pkg.badge} {pkg.badgeEn}</span>
                 </span>
                 <span className={`font-bold ${isSelected ? 'text-sage-700' : 'text-sage-600'}`}>
                   {formatCurrency(pkg.price)}
@@ -60,7 +63,6 @@ function CampaignCard({ c }: { c: typeof CAMPAIGNS[0] }) {
           })}
         </div>
 
-        {/* Sponsor CTA using selected package */}
         <Link
           href={`/donate?campaign=${c.slug}&trees=${selectedPkg.trees}&amount=${selectedPkg.price}`}
           className="flex items-center justify-center gap-2 bg-sage-700 hover:bg-sage-800 text-white font-bold py-2.5 rounded-xl text-sm transition-colors">
@@ -75,8 +77,6 @@ export default function CampaignsPage() {
   return (
     <div className="min-h-screen bg-cream-50">
       <Navbar />
-
-      {/* Hero banner */}
       <div className="relative h-64 mt-16">
         <Image src={NATURE_IMAGES.aerial} alt="Forest canopy" fill className="object-cover"/>
         <div className="absolute inset-0 bg-sage-900/70"/>
@@ -88,27 +88,25 @@ export default function CampaignsPage() {
       </div>
 
       <div className="max-w-6xl mx-auto px-4 py-16">
-
-        {/* Info bar */}
         <div className="flex flex-wrap gap-3 justify-center mb-10">
           {CAMPAIGN_PACKAGES.map(pkg => (
             <div key={pkg.id} className="flex items-center gap-2 bg-white border border-sage-100 rounded-full px-4 py-2 text-sm shadow-sm">
               <span>{pkg.emoji}</span>
-              <span className="font-semibold text-sage-900">{pkg.trees} Trees</span>
+              <span className="font-semibold text-sage-900">{pkg.badge}</span>
+              <span className="text-sage-400">·</span>
+              <span className="text-sage-600">{pkg.trees} Trees</span>
               <span className="text-sage-400">·</span>
               <span className="font-bold text-sage-700">{formatCurrency(pkg.price)}</span>
             </div>
           ))}
         </div>
 
-        {/* Campaign cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-12">
           {CAMPAIGNS.map(c => (
             <CampaignCard key={c.slug} c={c} />
           ))}
         </div>
 
-        {/* Individual tree section */}
         <div className="bg-forest-950 text-white rounded-3xl p-8 text-center max-w-xl mx-auto">
           <div className="text-4xl mb-3">🌱</div>
           <h3 className="font-display text-2xl mb-2">Individual Tree</h3>
@@ -119,9 +117,7 @@ export default function CampaignsPage() {
             Sponsor Trees <ArrowRight className="w-4 h-4"/>
           </Link>
         </div>
-
       </div>
-
       <Footer />
     </div>
   );
