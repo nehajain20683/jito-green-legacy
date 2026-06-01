@@ -98,11 +98,11 @@ export default function Footer() {
             © {new Date().getFullYear()} JITO Green Legacy. All rights reserved. · JITO Mumbai Zone
           </p>
           <a href="https://www.bnzgreen.io" target="_blank" rel="noopener noreferrer"
-            className="flex items-center gap-2 group bg-white rounded-xl px-3 py-2 shadow-sm hover:shadow-md transition-shadow">
-            <span className="text-gray-500 text-xs whitespace-nowrap">Powered by</span>
+            className="flex items-center gap-2 group opacity-80 hover:opacity-100 transition-opacity">
+            <span className="text-sage-400 text-xs whitespace-nowrap">Powered by</span>
             <Image src="/logos/bnz-logo.png" alt="BNZ Now"
               width={64} height={32} className="h-8 w-auto object-contain"/>
-            <span className="text-gray-600 text-xs font-semibold whitespace-nowrap">BNZ Green Technologies</span>
+            <span className="text-sage-300 text-xs font-semibold whitespace-nowrap">BNZ Green Technologies</span>
           </a>
         </div>
       </div>

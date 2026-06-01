@@ -187,7 +187,7 @@ export function generateCertificatePDF(data: {
     }
     .logo-env {
       position:absolute; top:26px; right:36px;
-      width:108px; height:96px;   /* 90% of JITO */
+      width:88px; height:auto;   /* reduced per request */
       object-fit:contain; background:transparent; z-index:20;
     }
 

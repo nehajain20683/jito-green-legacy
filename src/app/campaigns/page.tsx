@@ -48,7 +48,6 @@ function CampaignCard({ c }: { c: typeof CAMPAIGNS[0] }) {
                 }`}>
                 <span className="font-semibold text-sage-900">
                   {pkg.emoji} {pkg.trees} Trees
-                  <span className="text-sage-500 font-normal text-xs ml-1.5">· {pkg.badge} {pkg.badgeEn}</span>
                 </span>
                 <span className={`font-bold ${isSelected ? 'text-sage-700' : 'text-sage-600'}`}>
                   {formatCurrency(pkg.price)}
@@ -85,13 +84,15 @@ export default function CampaignsPage() {
       <div className="max-w-6xl mx-auto px-4 py-16">
         <div className="flex flex-wrap gap-3 justify-center mb-10">
           {CAMPAIGN_PACKAGES.map(pkg => (
-            <div key={pkg.id} className="flex items-center gap-2 bg-white border border-sage-100 rounded-full px-4 py-2 text-sm shadow-sm">
-              <span>{pkg.emoji}</span>
-              <span className="font-semibold text-sage-900">{pkg.badge}</span>
-              <span className="text-sage-400">·</span>
-              <span className="text-sage-600">{pkg.trees} Trees</span>
-              <span className="text-sage-400">·</span>
-              <span className="font-bold text-sage-700">{formatCurrency(pkg.price)}</span>
+            <div key={pkg.id} className="flex items-center gap-3 bg-white border border-sage-100 rounded-2xl px-4 py-2.5 shadow-sm">
+              <span className="text-xl">{pkg.emoji}</span>
+              <div className="flex flex-col">
+                <span className="font-bold text-sage-900 text-sm leading-tight">{pkg.badgeEn}</span>
+                <span className="text-sage-500 text-xs leading-tight">{pkg.badge}</span>
+              </div>
+              <span className="text-sage-300">|</span>
+              <span className="text-sage-700 text-sm">{pkg.trees} Trees</span>
+              <span className="font-bold text-sage-800 text-sm">{formatCurrency(pkg.price)}</span>
             </div>
           ))}
         </div>

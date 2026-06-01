@@ -45,11 +45,10 @@ const CHAPTERS = [
 ];
 
 const TIMELINE = [
-  { year: 'May 2026',  title: 'JES Team Formation',         desc: 'JITO Environment & Sustainability team assembled in Mumbai Zone under the leadership of Anand Chordia.' },
-  { year: '5 June 2026',title:'JITO Green Legacy Launch',   desc: 'Official World Environment Day launch of JITO Green Legacy with a vision for 1 lakh trees across Maharashtra.' },
-  { year: 'June 2026', title: 'Phase 1 — Kalyan Plantation',desc: 'First plantation drive of 10,000 trees at Palghar district farms covering 12.5 acres of verified land.' },
-  { year: '2027',      title: 'Phase 2 Expansion',          desc: 'Expansion to additional districts across Maharashtra, onboarding more farmer partners.' },
-  { year: '2028+',     title: 'Carbon Credit Programme',    desc: 'Launch of verified carbon credit programme under Verra VM0047 and Gold Standard frameworks.' },
+  { year: 'May 2026',              title: 'JES Team Formation',          desc: 'JITO Environment & Sustainability team assembled in Mumbai Zone under the leadership of Anand Chordia.' },
+  { year: '5 June 2026',           title: 'JITO Green Legacy Launch',    desc: 'Official World Environment Day launch of JITO Green Legacy with a vision for 1 lakh trees across Maharashtra.' },
+  { year: 'June 2026',             title: 'Phase 1 — Kalyan Plantation', desc: 'First plantation drive of 10,000 trees at Palghar district farms covering 12.5 acres of verified land.' },
+  { year: 'July – September 2026', title: 'Phase 2 Expansion',           desc: 'Expansion to additional districts across Maharashtra and onboarding of more farmer partners.' },
 ];
 
 // ── Reusable member card ─────────────────────────────────
