@@ -142,249 +142,239 @@ export function generateCertificatePDF(data: {
     *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
 
     html, body {
-      width: 1123px; height: 794px;
-      background: #fffef9;
-      font-family: 'DM Sans', sans-serif;
-      -webkit-print-color-adjust: exact;
-      print-color-adjust: exact;
-      overflow: hidden;
+      width:1123px; height:794px;
+      background:#fffef9;
+      font-family:'DM Sans',sans-serif;
+      -webkit-print-color-adjust:exact;
+      print-color-adjust:exact;
+      overflow:hidden;
     }
 
+    /* ── Page: fixed landscape frame ── */
     .page {
-      width: 1123px; height: 794px;
-      background: #fffef9;
-      position: relative; overflow: hidden;
+      width:1123px; height:794px;
+      background:#fffef9;
+      position:relative;
+      overflow:hidden;
+      display:flex;
+      flex-direction:column;
     }
 
-    /* ── Borders ── */
-    .outer-border { position:absolute; inset:12px; border:2.5px solid #c9a84c; border-radius:2px; pointer-events:none; z-index:5; box-sizing:border-box; }
+    /* ── z-index stack (low → high): watermark(1) border(5) corner(6) content(10) logos(20) ── */
+
+    /* Borders */
+    .outer-border { position:absolute; inset:12px; border:2.5px solid #c9a84c; border-radius:2px; pointer-events:none; z-index:5; }
     .inner-border { position:absolute; inset:18px; border:1px solid rgba(201,168,76,0.35); border-radius:1px; pointer-events:none; z-index:5; }
 
-    /* ── Corners ── */
+    /* Corners */
     .corner { position:absolute; width:46px; height:46px; z-index:6; }
     .c-tl { top:24px;  left:24px;  border-top:2px solid #8a9e3a; border-left:2px solid #8a9e3a; }
     .c-tr { top:24px;  right:24px; border-top:2px solid #8a9e3a; border-right:2px solid #8a9e3a; }
     .c-bl { bottom:24px; left:24px;  border-bottom:2px solid #8a9e3a; border-left:2px solid #8a9e3a; }
     .c-br { bottom:24px; right:24px; border-bottom:2px solid #8a9e3a; border-right:2px solid #8a9e3a; }
 
-    /* ── Watermark — shifted up to sit behind impact metrics ── */
+    /* Watermark — lowest z-index, sits behind everything */
     .watermark {
-      position:absolute; top:42%; left:50%;
+      position:absolute; top:50%; left:50%;
       transform:translate(-50%,-50%);
-      font-family:'Cinzel',serif; font-size:96px;
-      color:rgba(138,158,58,0.045);
+      font-family:'Cinzel',serif; font-size:100px;
+      color:rgba(138,158,58,0.04);
       font-weight:700; text-transform:uppercase; pointer-events:none;
       white-space:nowrap; letter-spacing:10px; z-index:1;
     }
 
-    /* ── Logos ── */
-    /* JITO: +15% from 120 = 138px */
+    /* JITO logo — top left, z:20 */
     .logo-jito {
-      position:absolute; top:24px; left:34px;
-      width:138px; height:auto;
-      object-fit:contain; background:transparent; z-index:20;
+      position:absolute; top:22px; left:30px;
+      width:100px; height:auto;
+      object-fit:contain; z-index:20;
     }
-    /* ENV: reduce to 20% of JITO = 28px wide (80% reduction) */
+    /* ENV logo — top right, 2× current (28→56px), z:20 */
     .logo-env {
-      position:absolute; top:30px; right:34px;
-      width:28px; height:auto;
-      object-fit:contain; background:transparent; z-index:20;
+      position:absolute; top:22px; right:30px;
+      width:56px; height:auto;
+      object-fit:contain; z-index:20;
     }
 
-    /* ── Centre header — pushed 28px lower ── */
-    .center-header {
-      position:absolute; top:56px; left:186px; right:80px;
-      text-align:center; z-index:20;
+    /* ── MAIN LAYOUT: one flex column fills the whole page ── */
+    /* top-band + content-body + footer-band = 794px */
+
+    /* Top band: logos are absolute, this band just reserves space */
+    .top-band {
+      height:110px;
+      flex-shrink:0;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      padding:0 180px;   /* clear of logos */
+      position:relative;
+      z-index:10;
     }
     .org-eyebrow {
       font-family:'Cinzel',serif; font-size:13px; letter-spacing:4px;
-      color:#8a9e3a; text-transform:uppercase; display:block; margin-bottom:5px;
+      color:#8a9e3a; text-transform:uppercase; display:block;
+      margin-bottom:3px;
     }
     .org-tagline {
-      font-size:11px; color:#6a8050; letter-spacing:0.3px;
+      font-size:10.5px; color:#6a8050; letter-spacing:0.3px;
       font-family:'DM Sans',sans-serif;
     }
 
-    /* ── Content area — starts below header band ── */
+    /* Content body — grows to fill remaining height, distributes children evenly */
     .content {
-      position:absolute;
-      top:132px; left:34px; right:34px; bottom:26px;
-      display:flex; flex-direction:column; align-items:center;
-      gap:0; text-align:center;
+      flex:1;
+      padding:0 44px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:space-between;
+      text-align:center;
+      z-index:10;
+      position:relative;
+      /* bottom padding ensures footer items don't crowd the bottom border */
+      padding-bottom:8px;
     }
 
-    /* ── Gold divider ── */
-    .gold-divider { display:flex; align-items:center; gap:8px; width:100%; justify-content:center; margin:3px 0; }
-    .gold-line { flex:1; max-width:220px; height:1px; background:linear-gradient(to right,transparent,#c9a84c,transparent); }
-    .gold-diamond { width:7px; height:7px; background:#c9a84c; transform:rotate(45deg); flex-shrink:0; }
+    /* Gold divider */
+    .gold-divider { display:flex; align-items:center; gap:8px; width:100%; justify-content:center; }
+    .gold-line { flex:1; max-width:200px; height:1px; background:linear-gradient(to right,transparent,#c9a84c,transparent); }
+    .gold-diamond { width:6px; height:6px; background:#c9a84c; transform:rotate(45deg); flex-shrink:0; }
 
-    /* ── Title block — with breathing room below logo area ── */
-    .title-block { margin-top:4px; margin-bottom:6px; }
+    /* Title */
     .cert-title {
-      font-family:'Cinzel',serif; font-size:30px;
+      font-family:'Cinzel',serif; font-size:28px;
       font-weight:700; color:#1a2e0a; letter-spacing:2px; line-height:1.15;
     }
     .cert-sub {
-      font-family:'DM Sans',sans-serif; font-size:10px; letter-spacing:4px;
-      text-transform:uppercase; color:#7a9e3a; margin-top:4px;
+      font-family:'DM Sans',sans-serif; font-size:9.5px; letter-spacing:3.5px;
+      text-transform:uppercase; color:#7a9e3a; margin-top:3px; display:block;
     }
 
-    /* ── Recipient block — focal point ── */
-    .recipient-block { margin:8px 0 6px; }
+    /* Recipient */
     .certifies-text {
-      font-family:'Playfair Display',serif; font-size:15px;
-      color:#5a7a3a; font-style:italic; margin-bottom:6px; display:block;
+      font-family:'Playfair Display',serif; font-size:14px;
+      color:#5a7a3a; font-style:italic; display:block; margin-bottom:4px;
     }
     .donor-name {
-      font-family:'Playfair Display',serif; font-size:54px; font-weight:700;
+      font-family:'Playfair Display',serif; font-size:52px; font-weight:700;
       font-style:italic; color:#1a2e0a; line-height:1.0;
-      border-bottom:2.5px solid #c9a84c; padding-bottom:5px;
-      min-width:380px; display:inline-block; margin-bottom:5px;
+      border-bottom:2px solid #c9a84c; padding-bottom:4px;
+      min-width:340px; display:inline-block; margin-bottom:3px;
     }
     .chapter-line {
-      font-family:'DM Sans',sans-serif; font-size:17px;
-      font-weight:600; color:#7a9e3a; display:block; margin-top:4px;
+      font-family:'DM Sans',sans-serif; font-size:16px;
+      font-weight:600; color:#7a9e3a; display:block; margin-top:3px;
     }
 
-    /* ── Body text ── */
+    /* Body text */
     .body-text {
-      font-family:'Playfair Display',serif; font-size:15px;
-      color:#3a5a2a; line-height:1.55; max-width:760px; margin:4px 0;
+      font-family:'Playfair Display',serif; font-size:14px;
+      color:#3a5a2a; line-height:1.5; max-width:740px;
     }
     .text-highlight { color:#1a2e0a; font-weight:700; }
-    .text-dedication { color:#7a9e3a; font-style:italic; font-size:16px; }
+    .text-dedication { color:#7a9e3a; font-style:italic; font-size:15px; }
 
-    /* ── Badge — slightly lower, natural gap ── */
-    .badge-wrap { margin:6px 0 4px; }
+    /* Badge */
     .badge {
-      display:inline-block; border:2px solid #c9a84c; border-radius:50px;
-      padding:5px 26px; font-family:'Cinzel',serif; font-size:12px; letter-spacing:2.5px;
+      display:inline-block; border:1.5px solid #c9a84c; border-radius:50px;
+      padding:4px 22px; font-family:'Cinzel',serif; font-size:11px; letter-spacing:2px;
       text-transform:uppercase; color:#8a7020;
       background:linear-gradient(135deg,#fffef0 0%,#fdf8e1 100%);
-      box-shadow:0 2px 8px rgba(201,168,76,0.18);
+      box-shadow:0 2px 8px rgba(201,168,76,0.15);
     }
 
-    /* ── Impact row — equal widths, equal spacing ── */
-    .impact-row {
-      display:flex; gap:0; justify-content:center; width:100%; margin:4px 0;
-    }
+    /* Impact row — equal widths, joined */
+    .impact-row { display:flex; gap:0; justify-content:center; width:70%; max-width:520px; }
     .impact-item {
-      text-align:center; padding:6px 0;
-      background:#f4f8f0; border:1px solid #d0e0c0; border-radius:0;
-      flex:1; max-width:180px;
-      border-right:none;
+      flex:1; text-align:center; padding:6px 4px;
+      background:#f4f8f0; border:1px solid #d0e0c0; border-right:none;
     }
-    .impact-item:first-child { border-radius:10px 0 0 10px; }
-    .impact-item:last-child  { border-radius:0 10px 10px 0; border-right:1px solid #d0e0c0; }
-    .impact-number {
-      font-family:'Cinzel',serif; font-size:19px; font-weight:700;
-      color:#264422; display:block; line-height:1.15;
-    }
-    .co2-arrow { color:#4a8a3a; font-size:18px; font-weight:900; margin-right:1px; }
-    .impact-label {
-      font-family:'DM Sans',sans-serif; font-size:8px; color:#7a9e3a;
-      text-transform:uppercase; letter-spacing:1.5px; margin-top:2px; display:block;
-    }
+    .impact-item:first-child { border-radius:8px 0 0 8px; }
+    .impact-item:last-child  { border-radius:0 8px 8px 0; border-right:1px solid #d0e0c0; }
+    .impact-number { font-family:'Cinzel',serif; font-size:18px; font-weight:700; color:#264422; display:block; line-height:1.2; }
+    .co2-arrow { color:#4a8a3a; font-weight:900; }
+    .impact-label { font-family:'DM Sans',sans-serif; font-size:7.5px; color:#7a9e3a; text-transform:uppercase; letter-spacing:1.5px; margin-top:2px; display:block; }
 
-    /* ── Footer — pushed up naturally via flex ── */
+    /* Footer row — 3 equal columns, anchored to bottom */
     .cert-footer {
-      width:100%; display:flex; justify-content:space-between; align-items:center;
-      border-top:1px solid #e0eccc; padding-top:7px; margin-top:4px;
+      width:100%; display:flex; justify-content:space-between; align-items:flex-end;
+      border-top:1px solid #e0eccc; padding-top:6px;
       flex-shrink:0;
     }
     .footer-item { text-align:center; flex:1; }
-    .footer-label {
-      font-family:'DM Sans',sans-serif; font-size:8px; color:#8a9e3a;
-      text-transform:uppercase; letter-spacing:2px; display:block; margin-bottom:2px;
-    }
-    .footer-value { font-family:'DM Sans',sans-serif; font-size:10px; color:#264422; font-weight:600; }
+    .footer-label { font-family:'DM Sans',sans-serif; font-size:7.5px; color:#8a9e3a; text-transform:uppercase; letter-spacing:1.5px; display:block; margin-bottom:2px; }
+    .footer-value { font-family:'DM Sans',sans-serif; font-size:9.5px; color:#264422; font-weight:600; }
+    .seal-left { width:38px; height:38px; border:1.5px solid #c9a84c; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:17px; margin:0 auto 3px; background:#fffef0; }
+    /* Mumbai Zone logo — anchored bottom-right, bigger */
+    .seal-mz { width:110px; height:auto; object-fit:contain; display:block; margin:0 auto 3px; }
 
-    /* Verified plantation seal */
-    .seal-left {
-      width:44px; height:44px; border:2px solid #c9a84c; border-radius:50%;
-      display:flex; align-items:center; justify-content:center; font-size:20px;
-      margin:0 auto 3px; background:#fffef0; box-shadow:0 2px 6px rgba(201,168,76,.12);
-    }
-
-    /* Mumbai Zone logo: +20% from 96 = ~115px */
-    .seal-mz { width:115px; height:auto; object-fit:contain; display:block; margin:0 auto 3px; }
-
-    @media screen and (max-width:1200px) {
-      html, body { width:100%; height:auto; overflow:auto; }
-      .page { width:100%; height:auto; min-height:100vh; }
-      .logo-jito { width:90px; }
-      .logo-env  { width:22px; }
-      .center-header { left:140px; right:68px; }
-      .content { position:relative; top:auto; left:auto; right:auto; bottom:auto; padding:10px 20px 16px; }
-      .donor-name { font-size:38px; min-width:auto; width:100%; }
-      .cert-title { font-size:22px; }
-      .impact-row { flex-wrap:wrap; gap:6px; }
-      .impact-item { border-radius:8px !important; border-right:1px solid #d0e0c0 !important; min-width:100px; max-width:none; }
-    }
-
-    @page { size: A4 landscape; margin: 0; }
+    /* ── Print: mirror screen exactly ── */
+    @page { size:297mm 210mm landscape; margin:0; }
     @media print {
-      html, body { width:297mm; height:210mm; }
+      html, body { width:297mm; height:210mm; overflow:hidden; }
       .page { width:297mm; height:210mm; }
+      .watermark, .outer-border, .inner-border, .corner { -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+      * { page-break-inside:avoid; }
     }
   </style>
 </head>
 <body>
 <div class="page">
-  <!-- Borders -->
+  <!-- z:1 — Watermark (behind everything) -->
+  <div class="watermark">CERTIFIED</div>
+
+  <!-- z:5 — Borders -->
   <div class="outer-border"></div>
   <div class="inner-border"></div>
-  <!-- Corners -->
+
+  <!-- z:6 — Corner accents -->
   <div class="corner c-tl"></div>
   <div class="corner c-tr"></div>
   <div class="corner c-bl"></div>
   <div class="corner c-br"></div>
-  <!-- Watermark -->
-  <div class="watermark">CERTIFIED</div>
 
-  <!-- JITO Logo — top left, larger -->
-  <img src="${JITO_LOGO_B64}" class="logo-jito" alt="JITO Logo"/>
+  <!-- z:20 — Logos (absolutely positioned, float above all) -->
+  <img src="${JITO_LOGO_B64}" class="logo-jito" alt="JITO"/>
+  <img src="${ENV_LOGO_B64}"  class="logo-env"  alt="JITO Environment &amp; Sustainability"/>
 
-  <!-- ENV Logo — top right, 90% of JITO -->
-  <img src="${ENV_LOGO_B64}" class="logo-env" alt="JITO Environment &amp; Sustainability"/>
-
-  <!-- Centre header text -->
-  <div class="center-header">
+  <!-- ── TOP BAND: JITO Green Legacy title + tagline (centered between logos) ── -->
+  <div class="top-band">
     <span class="org-eyebrow">JITO Green Legacy</span>
-    <div class="org-tagline">A Family Tree Plantation Drive by Mumbai Zone and its Chapters</div>
+    <span class="org-tagline">A Family Tree Plantation Drive by Mumbai Zone and its Chapters</span>
   </div>
 
-  <!-- Main content shifted up -->
+  <!-- ── CONTENT BODY: flex column, space-between fills 794px ── -->
   <div class="content">
 
-    <!-- Gold divider -->
+    <!-- 1. Gold divider -->
     <div class="gold-divider">
       <div class="gold-line"></div>
       <div class="gold-diamond"></div>
       <div class="gold-line"></div>
     </div>
 
-    <!-- Title (2pt larger) -->
+    <!-- 2. Certificate title -->
     <div>
       <div class="cert-title">Certificate of Tree Sponsorship</div>
-      <div class="cert-sub">Presented by JITO Mumbai Zone and its Chapters</div>
+      <span class="cert-sub">Presented by JITO Mumbai Zone and its Chapters</span>
     </div>
 
-    <!-- Small gold divider -->
-    <div class="gold-divider" style="margin:0">
-      <div class="gold-line" style="max-width:120px"></div>
+    <!-- 3. Thin divider -->
+    <div class="gold-divider">
+      <div class="gold-line" style="max-width:100px"></div>
       <div class="gold-diamond"></div>
-      <div class="gold-line" style="max-width:120px"></div>
+      <div class="gold-line" style="max-width:100px"></div>
     </div>
 
-    <!-- Donor info -->
+    <!-- 4. Recipient section -->
     <div>
-      <div class="certifies-text">This certificate is proudly presented to</div>
+      <span class="certifies-text">This certificate is proudly presented to</span>
       <div class="donor-name">${data.donorName}</div>
-      <div class="chapter-line" style="margin-top:5px">JITO Chapter: ${chapter}</div>
+      <span class="chapter-line">JITO Chapter: ${chapter}</span>
     </div>
 
-    <!-- Body -->
+    <!-- 5. Sponsorship description -->
     <div class="body-text">
       for generously sponsoring
       <span class="text-highlight">${data.numberOfTrees} ${data.numberOfTrees === 1 ? 'Tree' : 'Trees'}</span>
@@ -392,12 +382,12 @@ export function generateCertificatePDF(data: {
       ${data.dedicationName ? `<br/>in loving honour of <span class="text-dedication">${data.dedicationName}</span>` : ''}
     </div>
 
-    <!-- Tier badge — full tier name -->
+    <!-- 6. Tier badge -->
     <div>
       <span class="badge">${tier.emoji} ${tier.badge} · ${tier.badgeEn} ${tier.emoji}</span>
     </div>
 
-    <!-- Impact -->
+    <!-- 7. Impact stats row -->
     <div class="impact-row">
       <div class="impact-item">
         <span class="impact-number">${data.numberOfTrees}</span>
@@ -413,24 +403,19 @@ export function generateCertificatePDF(data: {
       </div>
     </div>
 
-    <!-- Footer row -->
+    <!-- 8. Bottom bar: verified | date+cert | Mumbai Zone (bottom-right) -->
     <div class="cert-footer">
-      <!-- Left: Geo verified -->
       <div class="footer-item">
         <div class="seal-left">📍</div>
         <span class="footer-label">Verified Plantation</span>
         <span class="footer-value">Geo-tagged &amp; Monitored</span>
       </div>
-
-      <!-- Centre: Date + Receipt -->
-      <div class="footer-item" style="text-align:center">
+      <div class="footer-item">
         <span class="footer-label">Date of Issue</span>
-        <span class="footer-value" style="display:block;margin-bottom:5px">${dateStr}</span>
+        <span class="footer-value" style="display:block;margin-bottom:3px">${dateStr}</span>
         <span class="footer-label">Certificate No.</span>
         <span class="footer-value">#${data.receiptNumber}</span>
       </div>
-
-      <!-- Right: Mumbai Zone logo -->
       <div class="footer-item">
         <img src="${MZ_LOGO_B64}" class="seal-mz" alt="Mumbai Zone"/>
         <span class="footer-label">Authorised By</span>

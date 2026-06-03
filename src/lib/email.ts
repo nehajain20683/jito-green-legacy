@@ -1,4 +1,5 @@
 // src/lib/email.ts — JITO Green Legacy · Resend integration
+// Attaches real PDF files (receipt + certificate) generated via puppeteer
 import { Resend } from 'resend';
 import { generateReceiptPDF, generateCertificatePDF } from './pdf';
 
@@ -6,7 +7,7 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 
 const FROM = process.env.FROM_EMAIL
   ? `${process.env.FROM_NAME || 'JITO Green Legacy'} <${process.env.FROM_EMAIL}>`
-  : 'JITO Green Legacy <greenlegacy@jitomumbai.org>';
+  : 'JITO Green Legacy <onboarding@resend.dev>';
 
 interface DonationEmailData {
   donorName: string;
@@ -16,7 +17,6 @@ interface DonationEmailData {
   campaignName: string;
   receiptNumber: string;
   dedicationName?: string;
-  // Pass full donation data so we can generate PDFs inline
   donationId: string;
   donorPan?: string;
   paymentGatewayId?: string;
@@ -24,8 +24,15 @@ interface DonationEmailData {
   chapter?: string;
 }
 
-function htmlToBase64(html: string): string {
-  return Buffer.from(html, 'utf-8').toString('base64');
+// Convert HTML to PDF buffer using puppeteer, fall back to HTML if unavailable
+async function generatePdfBuffer(html: string, landscape: boolean): Promise<Buffer | null> {
+  try {
+    const { htmlToPdfBuffer } = await import('./generate-pdf');
+    return await htmlToPdfBuffer(html, landscape);
+  } catch (e) {
+    console.warn('PDF generation failed, falling back to HTML attachment:', e);
+    return null;
+  }
 }
 
 export async function sendDonationConfirmationEmail(data: DonationEmailData): Promise<boolean> {
@@ -35,8 +42,7 @@ export async function sendDonationConfirmationEmail(data: DonationEmailData): Pr
   }
 
   try {
-    // Generate PDF HTML for receipt and certificate
-    const receiptHtml = generateReceiptPDF({
+    const receiptHtml     = generateReceiptPDF({
       receiptNumber:    data.receiptNumber,
       donorName:        data.donorName,
       donorEmail:       data.donorEmail,
@@ -58,8 +64,38 @@ export async function sendDonationConfirmationEmail(data: DonationEmailData): Pr
       chapter:        data.chapter || 'Mumbai Zone',
     });
 
+    // Try to generate real PDFs; fall back to HTML if puppeteer unavailable
+    const [receiptPdf, certPdf] = await Promise.all([
+      generatePdfBuffer(receiptHtml,     false),  // portrait
+      generatePdfBuffer(certificateHtml, true),   // landscape
+    ]);
+
+    const attachments = receiptPdf && certPdf
+      ? [
+          {
+            filename: `receipt-${data.receiptNumber}.pdf`,
+            content:  receiptPdf.toString('base64'),
+          },
+          {
+            filename: `certificate-${data.receiptNumber}.pdf`,
+            content:  certPdf.toString('base64'),
+          },
+        ]
+      : [
+          // Fallback: attach as HTML with clear note
+          {
+            filename: `receipt-${data.receiptNumber}.html`,
+            content:  Buffer.from(receiptHtml, 'utf-8').toString('base64'),
+          },
+          {
+            filename: `certificate-${data.receiptNumber}.html`,
+            content:  Buffer.from(certificateHtml, 'utf-8').toString('base64'),
+          },
+        ];
+
+    const isPdf  = receiptPdf !== null;
+    const co2    = data.numberOfTrees * 22;
     const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
-    const co2 = data.numberOfTrees * 22;
 
     const emailHtml = `<!DOCTYPE html>
 <html>
@@ -86,8 +122,9 @@ export async function sendDonationConfirmationEmail(data: DonationEmailData): Pr
     .impact { background: #264422; border-radius: 12px; padding: 20px; text-align: center; margin: 20px 0; }
     .impact-num { font-size: 42px; font-weight: bold; color: #7db870; font-family: Georgia, serif; }
     .impact-label { font-size: 12px; color: #aecfa4; font-family: sans-serif; margin-top: 4px; }
-    .attachments-note { background: #eaf2e6; border-radius: 10px; padding: 14px 16px; font-family: sans-serif; font-size: 13px; color: #376631; margin: 16px 0; }
-    .attachments-note strong { color: #264422; }
+    .attach-box { background: #eaf2e6; border-radius: 10px; padding: 14px 16px; font-family: sans-serif; font-size: 13px; color: #376631; margin: 16px 0; border-left: 4px solid #448039; }
+    .attach-box strong { color: #264422; }
+    .pdf-badge { display: inline-block; background: #dc2626; color: white; font-size: 9px; font-weight: 700; padding: 2px 6px; border-radius: 4px; margin-right: 4px; font-family: sans-serif; letter-spacing: 1px; vertical-align: middle; }
     .cta { text-align: center; margin: 24px 0; }
     .btn { display: inline-block; background: #448039; color: white; padding: 12px 26px; border-radius: 8px; text-decoration: none; font-size: 14px; font-family: sans-serif; font-weight: 600; margin: 5px; }
     .tax-note { font-size: 11px; color: #448039; background: #f6f9f4; border-radius: 8px; padding: 12px; font-family: sans-serif; line-height: 1.6; }
@@ -111,37 +148,38 @@ export async function sendDonationConfirmationEmail(data: DonationEmailData): Pr
       ${data.dedicationName ? `<div class="dedication">🌺 This donation is dedicated to <strong>${data.dedicationName}</strong></div>` : ''}
 
       <div class="receipt-box">
-        <h3>Donation Receipt</h3>
+        <h3>Donation Summary</h3>
         <div class="row"><span class="label">Receipt No.</span><span class="value">#${data.receiptNumber}</span></div>
         <div class="row"><span class="label">Campaign</span><span class="value">${data.campaignName}</span></div>
         <div class="row"><span class="label">Trees Sponsored</span><span class="value">${data.numberOfTrees} Trees 🌳</span></div>
+        ${data.paymentGatewayId ? `<div class="row"><span class="label">Transaction ID</span><span class="value">${data.paymentGatewayId}</span></div>` : ''}
         <div class="row"><span class="label">Amount Paid</span><span class="value">₹${data.amount.toLocaleString('en-IN')}</span></div>
       </div>
 
       <div class="impact">
-        <div class="impact-num">${co2}kg</div>
+        <div class="impact-num">↓${co2}kg</div>
         <div class="impact-label">Estimated CO₂ absorbed per year by your trees</div>
       </div>
 
-      <div class="attachments-note">
-        📎 <strong>Your documents are attached to this email:</strong><br/>
-        • Donation Receipt (HTML) — <em>receipt-${data.receiptNumber}.html</em><br/>
-        • Tree Sponsorship Certificate (HTML) — <em>certificate-${data.receiptNumber}.html</em><br/>
-        Open either file in your browser and use <strong>Print → Save as PDF</strong> for a PDF copy.
+      <div class="attach-box">
+        📎 <strong>Documents attached to this email:</strong><br/><br/>
+        <span class="pdf-badge">PDF</span> <strong>receipt-${data.receiptNumber}.pdf</strong> — Official Donation Receipt<br/>
+        <span class="pdf-badge">PDF</span> <strong>certificate-${data.receiptNumber}.pdf</strong> — Tree Sponsorship Certificate
+        ${!isPdf ? '<br/><br/><em style="font-size:12px;color:#888">Note: PDF generation is initialising. If files appear as .html, open in browser and use Ctrl+P → Save as PDF.</em>' : ''}
       </div>
 
       <div class="cta">
-        <a href="${appUrl}/dashboard" class="btn">View My Trees Dashboard</a>
+        <a href="${appUrl}/certificate?id=${data.donationId}" class="btn">View Certificate Online</a>
       </div>
 
       <div class="tax-note">
         📋 This donation may be eligible for tax exemption under Section 80G of the Income Tax Act, 1961.
-        Please retain this email and attachments as proof of donation · JITO Mumbai Zone
+        Please retain this email and attachments as proof of donation · JITO Mumbai Zone · mumbaizoneJES@jito.org
       </div>
     </div>
     <div class="footer">
       <strong>JITO Green Legacy</strong> · A Family Tree Plantation Drive by Mumbai Zone<br/>
-      greenlegacy@jitomumbai.org · Mumbai, Maharashtra, India<br/><br/>
+      mumbaizoneJES@jito.org · +91 91377 41905 · Mumbai, Maharashtra, India<br/><br/>
       This is an automated message. Please do not reply directly.
     </div>
   </div>
@@ -149,28 +187,15 @@ export async function sendDonationConfirmationEmail(data: DonationEmailData): Pr
 </html>`;
 
     const { data: result, error } = await resend.emails.send({
-      from: FROM,
-      to:   [data.donorEmail],
-      subject: `🌳 Thank You! Receipt #${data.receiptNumber} — JITO Green Legacy`,
-      html: emailHtml,
-      attachments: [
-        {
-          filename:    `receipt-${data.receiptNumber}.html`,
-          content:     htmlToBase64(receiptHtml),
-        },
-        {
-          filename:    `certificate-${data.receiptNumber}.html`,
-          content:     htmlToBase64(certificateHtml),
-        },
-      ],
+      from:        FROM,
+      to:          [data.donorEmail],
+      subject:     `🌳 Thank You! Receipt #${data.receiptNumber} — JITO Green Legacy`,
+      html:        emailHtml,
+      attachments,
     });
 
-    if (error) {
-      console.error('Resend error:', error);
-      return false;
-    }
-
-    console.log('Email sent via Resend:', result?.id);
+    if (error) { console.error('Resend error:', error); return false; }
+    console.log(`Email sent: ${result?.id} | Attachments: ${isPdf ? 'PDF ✓' : 'HTML fallback'}`);
     return true;
   } catch (err) {
     console.error('Email send failed:', err);
